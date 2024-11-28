@@ -13,6 +13,6 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   WebViewStyle: {
-    flex: 1
+    flex: 1,
   }
 });
