@@ -1,9 +1,11 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { Icon } from 'react-native-paper';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -47,6 +49,20 @@ export default function TabLayout() {
         options={{
           title: 'Website',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen 
+        name="map"
+        options={{
+          title: 'Map',
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="map-marker" color={color} size={28} />,
+        }}
+      />
+      <Tabs.Screen 
+        name="settings"
+        options={{
+          title: 'Settings',
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="account-settings" color={color} size={28} />,
         }}
       />
     </Tabs>
