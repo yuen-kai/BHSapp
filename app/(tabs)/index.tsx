@@ -5,28 +5,26 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ProgressBar, MD3Colors } from 'react-native-paper';
 
 export default function HomeScreen() {
   let currentCourse;
   type Course = {
     name: string
     teacher: string
-    block: (string[])[5]
+    block:string
+    //  (string[])[5]
     rmNum: number
   }
-  let courses:Course[] = [{}, {}]
-  const TimeLeftBar = ({timeLeft}: {timeLeft: number}) => {
-    return <ThemedText style={{fontWeight: 'bold', fontSize: 25, textAlign: 'center'}}>Time Left: {timeLeft}</ThemedText>
-  }
-  const OuterBar = ({timeLeft}: {timeLeft: number}) => {
-    return <View style={{backgroundColor: 'red', width: '120%', height: '120%', alignSelf: 'center', zIndex: -1, position: 'absolute', borderRadius: '50%'}}></View>
+  let courses:Course[] = [{name:"English",teacher:"teacherName", block: "A", rmNum: 324}, {name:"Math",teacher:"teacherName2", block: "B", rmNum: 124}]
+  const TimeLeftText = ({timeLeft}: any) => {
+    return <ThemedText style={{fontSize: 18, zIndex: 3}}>{timeLeft} Minutes Remaining</ThemedText>
   }
   return (
-    <SafeAreaView style={{paddingTop: 10}}>
-      <View style={{backgroundColor: 'cyan', alignSelf: 'center', borderRadius: '50%', width: '200', height: '200', justifyContent: 'center', top: '125%'}}>
-        <OuterBar timeLeft={0}/>
-        <TimeLeftBar timeLeft={0}/>
-      </View>
+    <SafeAreaView style={{paddingTop: 10, flex: 1, width: '100%', height: '100%'}}>
+      <ProgressBar progress={0.5} color={MD3Colors.error50} style={{position: 'absolute', flex: 1, height: 50, borderRadius: 30, alignSelf: 'center', top: 300, width: '75%'}}>
+        <TimeLeftText timeLeft={0}></TimeLeftText>
+      </ProgressBar>
     </SafeAreaView>
   )
 }
