@@ -2,40 +2,21 @@ import { Tabs } from "expo-router";
 import React from "react";
 import { Platform, StyleSheet, View } from "react-native";
 
-import { HapticTab } from "@/components/HapticTab";
-import { IconSymbol } from "@/components/ui/IconSymbol";
 import { Icon } from "react-native-paper";
-import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import BlurTabBarBackground from "@/components/ui/TabBarBackground.ios";
-import { BlurView } from "expo-blur";
 
 export default function TabLayout() {
 	const colorScheme = useColorScheme();
 
 	return (
-		<Tabs
-			screenOptions={{
-				tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint, //icon color when selected
-				headerShown: false,
-				tabBarButton: HapticTab,
-				tabBarBackground: TabBarBackground,
-				tabBarStyle: Platform.select({
-					ios: {
-						// Use a transparent background on iOS to show the blur effect
-						position: "absolute",
-					},
-					default: {},
-				}),
-			}}
-		>
+		<Tabs screenOptions={{ headerShown: false }}>
 			<Tabs.Screen
 				name="index"
 				options={{
 					title: "Home",
 					tabBarIcon: ({ color }) => (
-						<IconSymbol size={28} name="house.fill" color={color} />
+						<Icon size={28} source="home" color={color} />
 					),
 				}}
 			/>
@@ -44,7 +25,7 @@ export default function TabLayout() {
 				options={{
 					title: "Website",
 					tabBarIcon: ({ color }) => (
-						<IconSymbol size={28} name="paperplane.fill" color={color} />
+						<Icon size={28} source="web" color={color} />
 					),
 				}}
 			/>
@@ -67,11 +48,11 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name="settings"
+				name="profile"
 				options={{
-					title: "Settings",
+					title: "Profile",
 					tabBarIcon: ({ color }) => (
-						<Icon source="account-settings" color={color} size={28} />
+						<Icon source="account" color={color} size={28} />
 					),
 				}}
 			/>

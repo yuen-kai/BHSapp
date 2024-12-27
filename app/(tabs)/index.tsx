@@ -1,9 +1,5 @@
 import { Image, StyleSheet, Platform, View } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ProgressBar, MD3Colors } from 'react-native-paper';
 
@@ -18,7 +14,7 @@ export default function HomeScreen() {
   }
   let courses:Course[] = [{name:"English",teacher:"teacherName", block: "A", rmNum: 324}, {name:"Math",teacher:"teacherName2", block: "B", rmNum: 124}]
   const TimeLeftText = ({timeLeft}: any) => {
-    return <ThemedText style={{fontSize: 18, zIndex: 3}}>{timeLeft} Minutes Remaining</ThemedText>
+    return <Text style={{fontSize: 18, zIndex: 3}}>{timeLeft} Minutes Remaining</Text>
   }
   return (
     <SafeAreaView style={{paddingTop: 10, flex: 1, width: '100%', height: '100%'}}>

@@ -10,6 +10,7 @@ import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { useTheme, Text, TextInput, Button } from "react-native-paper";
 import { Dropdown } from "react-native-paper-dropdown";
 import { FlashList } from "@shopify/flash-list";
+import CourseInfoCard from "@/components/CourseInfoCard";
 
 type Course = {
 	name: string;
@@ -137,29 +138,12 @@ const AddCourseScreen = () => {
 						data={addedCourses}
 						keyExtractor={(item, index) => index.toString()}
 						renderItem={({ item }) => (
-							<View
-								style={[styles.courseCard, { borderColor: colors.primary }]}
-							>
-								<Text style={styles.courseText}>
-									<Text style={styles.bold}>Name:</Text> {item.name}
-								</Text>
-								<Text style={styles.courseText}>
-									<Text style={styles.bold}>Teacher:</Text> {item.teacher}
-								</Text>
-								<Text style={styles.courseText}>
-									<Text style={styles.bold}>Block:</Text> {item.block}
-								</Text>
-								{item.optionalBlock && (
-									<Text style={styles.courseText}>
-										<Text style={styles.bold}>Optional Block:</Text>{" "}
-										{item.optionalBlock}
-									</Text>
-								)}
-								<Text style={styles.courseText}>
-									<Text style={styles.bold}>Room Number:</Text>{" "}
-									{item.roomNumber}
-								</Text>
-							</View>
+							<CourseInfoCard
+								name={item.name}
+								teacher={item.teacher}
+								block={item.block}
+								optionalBlock={item.optionalBlock}
+								roomNumber={item.roomNumber}/>
 						)}
 						estimatedItemSize={100}
 					/>
