@@ -192,18 +192,6 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		marginBottom: 10,
 	},
-	courseCard: {
-		marginBottom: 10,
-		padding: 10,
-		borderWidth: 1,
-		borderRadius: 5,
-	},
-	courseText: {
-		fontSize: 16,
-	},
-	bold: {
-		fontWeight: "bold",
-	},
 });
 
 export default AddCourseScreen;

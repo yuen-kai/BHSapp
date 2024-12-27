@@ -54,44 +54,6 @@ const CourseInfoCard: React.FC<CourseProps> = ({
 export default CourseInfoCard;
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		padding: 20,
-	},
-	title: {
-		fontSize: 24,
-		marginBottom: 20,
-	},
-	input: {
-		marginBottom: 10,
-	},
-	dropdown: {
-		backgroundColor: "#eee",
-		borderWidth: 1,
-		borderColor: "#555",
-		borderRadius: 5,
-		paddingHorizontal: 16,
-		paddingVertical: 15,
-	},
-	placeholderStyle: {
-		color: "#777",
-		fontSize: 16,
-	},
-	selectedTextStyle: {
-		color: "#000",
-		fontSize: 16,
-	},
-	button: {
-		marginTop: 10,
-	},
-	courseList: {
-		marginTop: 30,
-		flex: 1,
-	},
-	subTitle: {
-		fontSize: 20,
-		marginBottom: 10,
-	},
 	courseCard: {
 		marginBottom: 10,
 		padding: 10,
