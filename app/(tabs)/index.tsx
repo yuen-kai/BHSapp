@@ -11,6 +11,7 @@ import { ProgressBar, MD3Colors } from "react-native-paper";
 import React, { useEffect } from "react";
 import { Font } from "react-native-paper/lib/typescript/types";
 import { FlashList } from "@shopify/flash-list";
+import { clamp } from "react-native-reanimated";
 
 export default function HomeScreen() {
 	let currentCourse;
@@ -62,32 +63,57 @@ export default function HomeScreen() {
 		{ block: "B", start: "9:22 am", end: "10:17 am" },
 		{ block: "C", start: "10:24 am", end: "11:19 am" },
 		{ block: "D", start: "11:26 am", end: "12:21 pm" },
-		{ block: "E", start: "12:28 pm", end: "1:23 pm" },
-		{ block: "F", start: "1:30 pm", end: "2:25 pm" },
-		{ block: "G", start: "2:32 pm", end: "3:27 pm" },
+		{ block: "E", start: "12:24 pm", end: "12:51 pm" },
+		{ block: "F", start: "12:58 pm", end: "1:53 pm" },
+		{ block: "G", start: "2:00 pm", end: "2:55 pm" },
 	];
 
 	const [timeRemaining, setTimeRemaining] = React.useState(55);
-	const [currentDate, setCurrentDate] = React.useState(new Date());
-	let endTime = new Date(
-		currentDate.getFullYear(),
-		currentDate.getMonth(),
-		currentDate.getDate(),
-		15,
-		30
-	);
 
+	const findNearestStartTime = (): Date | null => {
+		const now = new Date();
+		for (let i = 0; i < schedule.length; i++) {
+		  const startTime = convertToDate(schedule[i].start);
+		  if (startTime > now) {
+			return convertToDate(schedule[i].start);
+		  } else if (i === schedule.length-1) {
+			return convertToDate(schedule[schedule.length-1].start);
+		  }
+		}
+		return null;
+	};
+
+	const findNearestFutureEndTime = (): Date | null => {
+		const now = new Date();
+		for (let i = 0; i < schedule.length; i++) {
+		  const endTime = convertToDate(schedule[i].end);
+		  if (endTime > now) {
+			return endTime;
+		  }
+		}
+		return null;
+	};
 	function getDifferenceInMinutes(currentDate: Date, endTime: Date) {
 		return Math.max(
 			0,
-			Math.floor((endTime.getTime() - currentDate.getTime()) / (1000 * 60))
+			Math.round((endTime.getTime() - currentDate.getTime()) / (1000 * 60))
 		);
 	}
 
+	const [nearestStartTime, setNearestStartTime] = React.useState(findNearestStartTime())
+	const [nearestEndTime, setNearestEndTime] = React.useState(findNearestFutureEndTime())
+	const [progress, setProgress] = React.useState(0);
 	useEffect(() => {
 		const interval = setInterval(() => {
-			setCurrentDate(new Date());
-			setTimeRemaining(getDifferenceInMinutes(currentDate, endTime));
+			setNearestStartTime(findNearestStartTime());
+			setNearestEndTime(findNearestFutureEndTime());
+     		if (nearestEndTime) {
+        		setTimeRemaining(getDifferenceInMinutes(new Date(), nearestEndTime));
+      		}
+			console.log(progress)
+			if (nearestStartTime && nearestEndTime) {
+				setProgress(parseFloat(clamp(((getDifferenceInMinutes(nearestStartTime, nearestEndTime) - getDifferenceInMinutes(new Date(), nearestEndTime)) / getDifferenceInMinutes(nearestStartTime, nearestEndTime)), 0, 1).toFixed(2)));
+			}
 		}, 1000);
 		return () => clearInterval(interval);
 	}, []);
@@ -122,12 +148,13 @@ export default function HomeScreen() {
 					position: "relative",
 					width: "80%",
 					alignSelf: "center",
-					marginTop: "25%",
+					marginTop: "5%",
+					marginBottom: "5%",
 					height: "12.5%",
 				}}
 			>
 				<ProgressBar
-					progress={0.5}
+					progress={progress}
 					color={MD3Colors.error50}
 					style={{
 						height: "100%",
