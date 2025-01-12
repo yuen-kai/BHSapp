@@ -23,6 +23,25 @@ export default function Account({ session }: { session: Session }) {
 	const [profileImage, setProfileImage] = useState<string>("");
 
 	useEffect(() => {
+		if (avatarUrl) downloadImage(avatarUrl);
+	}, [avatarUrl]);
+
+	async function downloadImage(path) {
+		try {
+			const { data, error } = await supabase.storage
+				.from("avatars")
+				.download(path);
+			if (error) {
+				throw error;
+			}
+			const url = URL.createObjectURL(data);
+			setAvatarUrl(url);
+		} catch (error) {
+			console.log("Error downloading image: ", error.message);
+		}
+	}
+
+	useEffect(() => {
 		if (session) getProfile();
 	}, [session]);
 
@@ -77,12 +96,12 @@ export default function Account({ session }: { session: Session }) {
 	};
 
 	async function updateProfile({
-		username,
-		website,
+		name,
+		bio,
 		avatar_url,
 	}: {
-		username: string;
-		website: string;
+		name: string;
+		bio: string;
 		avatar_url: string;
 	}) {
 		try {
@@ -132,7 +151,12 @@ export default function Account({ session }: { session: Session }) {
 					</Button>
 				</View>
 				<View style={[styles.verticallySpaced, styles.mt20]}>
-					<TextInput label="Email" mode={"outlined"} value={session?.user?.email} disabled />
+					<TextInput
+						label="Email"
+						mode={"outlined"}
+						value={session?.user?.email}
+						disabled
+					/>
 				</View>
 				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 					<>
@@ -160,7 +184,7 @@ export default function Account({ session }: { session: Session }) {
 				<View style={[styles.verticallySpaced, styles.mt20]}>
 					<Button
 						onPress={() =>
-							updateProfile({ username: name, website: bio, avatar_url: avatarUrl })
+							updateProfile({ name: name, bio: bio, avatar_url: avatarUrl })
 						}
 						disabled={loading}
 					>

@@ -110,7 +110,7 @@ export default function HomeScreen() {
      		if (nearestEndTime) {
         		setTimeRemaining(getDifferenceInMinutes(new Date(), nearestEndTime));
       		}
-			console.log(progress)
+			// console.log(progress)
 			if (nearestStartTime && nearestEndTime) {
 				setProgress(parseFloat(clamp(((getDifferenceInMinutes(nearestStartTime, nearestEndTime) - getDifferenceInMinutes(new Date(), nearestEndTime)) / getDifferenceInMinutes(nearestStartTime, nearestEndTime)), 0, 1).toFixed(2)));
 			}
