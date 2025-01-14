@@ -47,7 +47,7 @@ export default function HomeScreen() {
 		{ name: "English", teacher: "Mr. McGarry", block: "A", rmNum: 324 },
 		{ name: "Math", teacher: "Ms. Smith", block: "B", rmNum: 124 },
 		{ name: "Science", teacher: "Mr. Johnson", block: "C", rmNum: 204 },
-		{ name: "History", teacher: "Ms. Lee", block: "D", rmNum: 304 },
+		{ name: "History", teacher: "Mrs. Lee", block: "D", rmNum: 304 },
 		{ name: "Art", teacher: "Mr. Brown", block: "E", rmNum: 404 },
 		{
 			name: "Physical Education",
