@@ -115,13 +115,14 @@ export default function Account({ session }: { session: Session }) {
 			// Upload the image to the server
 			const fileExt = imagePath.split('.').pop();
 			const filePath = `${Math.random()}.${fileExt}`;
-
 			const response = await fetch(imagePath);
 			const blob = await response.blob();
-			
-			const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, blob);
+			console.log(blob)
+			const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, blob, {
+				contentType: blob.type,
+			  });
 
-			setStoredAvatarUrl(filePath);
+			// setStoredAvatarUrl(filePath);
 
 			if (uploadError) {
 				throw uploadError;
