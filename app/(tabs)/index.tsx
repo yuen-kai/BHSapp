@@ -75,12 +75,10 @@ export default function HomeScreen() {
 		for (let i = 0; i < schedule.length; i++) {
 		  const startTime = convertToDate(schedule[i].start);
 		  if (startTime > now) {
-			return convertToDate(schedule[i].start);
-		  } else if (i === schedule.length-1) {
-			return convertToDate(schedule[schedule.length-1].start);
+			return convertToDate(schedule[i-1].start);
 		  }
 		}
-		return null;
+		return convertToDate(schedule[schedule.length-1].start);
 	};
 
 	const findNearestFutureEndTime = (): Date | null => {
@@ -110,7 +108,6 @@ export default function HomeScreen() {
      		if (nearestEndTime) {
         		setTimeRemaining(getDifferenceInMinutes(new Date(), nearestEndTime));
       		}
-			// console.log(progress)
 			if (nearestStartTime && nearestEndTime) {
 				setProgress(parseFloat(clamp(((getDifferenceInMinutes(nearestStartTime, nearestEndTime) - getDifferenceInMinutes(new Date(), nearestEndTime)) / getDifferenceInMinutes(nearestStartTime, nearestEndTime)), 0, 1).toFixed(2)));
 			}
