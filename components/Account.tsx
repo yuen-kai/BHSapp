@@ -19,14 +19,15 @@ export default function Account({ session }: { session: Session }) {
 	const [loading, setLoading] = useState(true);
 	const [name, setName] = useState("");
 	const [bio, setBio] = useState("");
-	const [avatarUrl, setAvatarUrl] = useState("");
-	const [profileImage, setProfileImage] = useState<string>("");
+	const [storedAvatarUrl, setStoredAvatarUrl] = useState("");
+	const [localAvatarUrl, setLocalAvatarUrl] = useState<string>("");
+	const [avatarImage, setAvatarImage] = useState<ImagePicker.ImagePickerAsset | null>(null);
 
 	useEffect(() => {
-		if (avatarUrl) downloadImage(avatarUrl);
-	}, [avatarUrl]);
+		if (storedAvatarUrl) downloadImage(storedAvatarUrl);
+	}, [storedAvatarUrl]);
 
-	async function downloadImage(path) {
+	async function downloadImage(path: string) {
 		try {
 			const { data, error } = await supabase.storage
 				.from("avatars")
@@ -35,7 +36,7 @@ export default function Account({ session }: { session: Session }) {
 				throw error;
 			}
 			const url = URL.createObjectURL(data);
-			setAvatarUrl(url);
+			setLocalAvatarUrl(url);
 		} catch (error) {
 			console.log("Error downloading image: ", error.message);
 		}
@@ -62,7 +63,7 @@ export default function Account({ session }: { session: Session }) {
 			if (data) {
 				setName(data.name);
 				setBio(data.bio);
-				setAvatarUrl(data.avatar_url);
+				setStoredAvatarUrl(data.avatar_url);
 			}
 		} catch (error) {
 			if (error instanceof Error) {
@@ -91,28 +92,46 @@ export default function Account({ session }: { session: Session }) {
 		});
 
 		if (!result.canceled) {
-			setProfileImage(result.assets[0].uri);
+			setLocalAvatarUrl(result.assets[0].uri);
+			setAvatarImage(result.assets[0])
 		}
 	};
+
 
 	async function updateProfile({
 		name,
 		bio,
-		avatar_url,
+		imagePath,
 	}: {
 		name: string;
 		bio: string;
-		avatar_url: string;
+		imagePath: string;
 	}) {
 		try {
 			setLoading(true);
 			if (!session?.user) throw new Error("No user on the session!");
+			if (imagePath == "") throw new Error('You must select an image to upload.')
+
+			// Upload the image to the server
+			const fileExt = imagePath.split('.').pop();
+			const filePath = `${Math.random()}.${fileExt}`;
+
+			const response = await fetch(imagePath);
+			const blob = await response.blob();
+			
+			const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, blob);
+
+			setStoredAvatarUrl(filePath);
+
+			if (uploadError) {
+				throw uploadError;
+			}
 
 			const updates = {
 				id: session?.user.id,
 				name,
 				bio,
-				avatar_url,
+				avatar_url: filePath,
 				updated_at: new Date(),
 			};
 
@@ -140,7 +159,7 @@ export default function Account({ session }: { session: Session }) {
 				</Text>
 				<View style={styles.avatarContainer}>
 					<TouchableOpacity onPress={pickImage}>
-						<Avatar.Image size={100} source={{ uri: profileImage }} />
+						<Avatar.Image size={100} source={{ uri: localAvatarUrl }} />
 					</TouchableOpacity>
 					<Button
 						mode="text"
@@ -184,7 +203,7 @@ export default function Account({ session }: { session: Session }) {
 				<View style={[styles.verticallySpaced, styles.mt20]}>
 					<Button
 						onPress={() =>
-							updateProfile({ name: name, bio: bio, avatar_url: avatarUrl })
+							updateProfile({ name: name, bio: bio, imagePath: localAvatarUrl })
 						}
 						disabled={loading}
 					>
