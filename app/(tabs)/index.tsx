@@ -19,6 +19,7 @@ export default function HomeScreen() {
 		name: string;
 		teacher: string;
 		block: string;
+		term: string;
 		//  (string[])[5]
 		rmNum: number;
 	};
@@ -44,18 +45,19 @@ export default function HomeScreen() {
 	};
 
 	let courses: Course[] = [
-		{ name: "English", teacher: "Mr. McGarry", block: "A", rmNum: 324 },
-		{ name: "Math", teacher: "Ms. Smith", block: "B", rmNum: 124 },
-		{ name: "Science", teacher: "Mr. Johnson", block: "C", rmNum: 204 },
-		{ name: "History", teacher: "Mrs. Lee", block: "D", rmNum: 304 },
-		{ name: "Art", teacher: "Mr. Brown", block: "E", rmNum: 404 },
+		{ name: "English", teacher: "Mr. McGarry", block: "A", term: 'Full Year', rmNum: 324 },
+		{ name: "Math", teacher: "Ms. Smith", block: "B", term: 'Full Year', rmNum: 124 },
+		{ name: "Science", teacher: "Mr. Johnson", block: "C", term: 'Full Year', rmNum: 204 },
+		{ name: "History", teacher: "Mrs. Lee", block: "D", term: 'Full Year', rmNum: 304 },
+		{ name: "Art", teacher: "Mr. Brown", block: "E", term: 'Semester 2', rmNum: 404 },
 		{
 			name: "Physical Education",
 			teacher: "Ms. Davis",
 			block: "F",
+			term: 'Semester 1',
 			rmNum: 504,
 		},
-		{ name: "Music", teacher: "Mr. Wilson", block: "G", rmNum: 604 },
+		{ name: "Music", teacher: "Mr. Wilson", block: "G", term: 'Full Year', rmNum: 604 },
 	];
 
 	let schedule: Schedule[] = [
@@ -188,6 +190,7 @@ export default function HomeScreen() {
 								<Text style={styles.courseItemSubtitle}>{item.teacher}</Text>
 								<Text style={styles.courseItemSubtitle}>Room {item.rmNum}</Text>
 								<Text style={styles.courseItemSubtitle}>Block {item.block}</Text>
+								<Text style={styles.courseItemSubtitle}>Term {item.term}</Text>
 								<Text style={styles.courseItemSubtitle}>Starts {times?.start}</Text>
 								<Text style={styles.courseItemSubtitle}>Ends {times?.end}</Text>
 							</Card.Content>

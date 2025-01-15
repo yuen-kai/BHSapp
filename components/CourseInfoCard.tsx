@@ -15,7 +15,7 @@ interface CourseProps {
 	name: string;
 	teacher: string;
 	block: string;
-	optionalBlock?: string;
+	term?: string;
 	roomNumber: string;
 }
 
@@ -23,7 +23,7 @@ const CourseInfoCard: React.FC<CourseProps> = ({
 	name,
 	teacher,
 	block,
-	optionalBlock,
+	term,
 	roomNumber,
 }) => {
 	const { colors } = useTheme();
@@ -39,9 +39,9 @@ const CourseInfoCard: React.FC<CourseProps> = ({
 			<Text style={styles.courseText}>
 				<Text style={styles.bold}>Block:</Text> {block}
 			</Text>
-			{optionalBlock && (
+			{term && (
 				<Text style={styles.courseText}>
-					<Text style={styles.bold}>Optional Block:</Text> {optionalBlock}
+					<Text style={styles.bold}>Term:</Text> {term}
 				</Text>
 			)}
 			<Text style={styles.courseText}>
