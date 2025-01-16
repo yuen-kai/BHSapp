@@ -16,15 +16,8 @@ type Course = {
 	name: string;
 	teacher: string;
 	block: string;
-	optionalBlock?: string;
+	term?: string;
 	roomNumber: string;
-};
-
-// Mock function to generate room numbers
-const getRmNum = (name: string, teacher: string, block: string): string => {
-	return `${name.substring(0, 3).toUpperCase()}-${block}-${teacher
-		.substring(0, 3)
-		.toUpperCase()}`;
 };
 
 const AddCourseScreen = () => {
@@ -32,7 +25,8 @@ const AddCourseScreen = () => {
 	const [courseName, setCourseName] = useState("");
 	const [courseTeacher, setCourseTeacher] = useState("");
 	const [courseBlock, setCourseBlock] = useState("");
-	const [optionalBlock, setOptionalBlock] = useState("");
+	const [term, setTerm] = useState("");
+	const [roomNumber, setRoomNumber] = useState("");
 	const [addedCourses, setAddedCourses] = useState<Course[]>([]);
 
 	const blockOptions = [
@@ -45,18 +39,23 @@ const AddCourseScreen = () => {
 		{ label: "G", value: "G" },
 	];
 
+	const termOptions = [
+		{ label: "Semester 1", value: "S1" },
+		{ label: "Semester 2", value: "S2" },
+		{ label: "Full Year", value: "FY" },
+	];
+
 	const handleAddCourse = () => {
-		if (!courseName || !courseTeacher || !courseBlock) {
-			alert("Please fill in the course name, teacher, and main block.");
+		if (!courseName || !courseTeacher || !courseBlock || !roomNumber) {
+			alert("Please fill in the course name, teacher, main block, and room number.");
 			return;
 		}
 
-		const roomNumber = getRmNum(courseName, courseTeacher, courseBlock);
 		const newCourse: Course = {
 			name: courseName,
 			teacher: courseTeacher,
 			block: courseBlock,
-			optionalBlock: optionalBlock || undefined,
+			term: term || undefined,
 			roomNumber,
 		};
 
@@ -66,7 +65,8 @@ const AddCourseScreen = () => {
 		setCourseName("");
 		setCourseTeacher("");
 		setCourseBlock("");
-		setOptionalBlock("");
+		setTerm("");
+		setRoomNumber("");
 	};
 
 	return (
@@ -103,7 +103,7 @@ const AddCourseScreen = () => {
 						label="Main Block"
 						placeholder="Select Main Block"
 						value={courseBlock}
-						onSelect={setCourseBlock}
+						onSelect={(value) => setCourseBlock(value || "")}
 						mode={"outlined"}
 						// style={[styles.input]}
 						// placeholderStyle={styles.placeholderStyle}
@@ -112,11 +112,11 @@ const AddCourseScreen = () => {
 				</View>
 				<View style={styles.input}>
 					<Dropdown
-						options={blockOptions}
-						label="Secondary Block"
-						placeholder="Select Second Block (optional)"
-						value={optionalBlock}
-						onSelect={setOptionalBlock}
+						options={termOptions}
+						label="Term"
+						placeholder="Select Term"
+						value={term}
+						onSelect={(value) => setTerm(value || "")}
 						mode={"outlined"}
 
 						// style={[styles.input, styles.dropdown]}
@@ -124,6 +124,18 @@ const AddCourseScreen = () => {
 						// selectedTextStyle={styles.selectedTextStyle}
 					/>
 				</View>
+				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+					<>
+						<TextInput
+							label="Room Number"
+							value={roomNumber}
+							onChangeText={setRoomNumber}
+							mode="outlined"
+							style={styles.input}
+							onSubmitEditing={Keyboard.dismiss}
+						/>
+					</>
+				</TouchableWithoutFeedback>
 				<Button
 					mode="contained"
 					onPress={handleAddCourse}
@@ -142,7 +154,7 @@ const AddCourseScreen = () => {
 								name={item.name}
 								teacher={item.teacher}
 								block={item.block}
-								optionalBlock={item.optionalBlock}
+								term={item.term}
 								roomNumber={item.roomNumber}/>
 						)}
 						estimatedItemSize={100}
