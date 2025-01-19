@@ -16,7 +16,7 @@ interface CourseProps {
 	teacher: string;
 	block: string;
 	term?: string;
-	roomNumber: string;
+	roomNumber: number;
 }
 
 const CourseInfoCard: React.FC<CourseProps> = ({

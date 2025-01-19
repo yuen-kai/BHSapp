@@ -10,15 +10,8 @@ import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { useTheme, Text, TextInput, Button } from "react-native-paper";
 import { Dropdown } from "react-native-paper-dropdown";
 import { FlashList } from "@shopify/flash-list";
+import { Course, courses, updateCourses } from '@/config/coursesConfig';
 import CourseInfoCard from "@/components/CourseInfoCard";
-
-type Course = {
-	name: string;
-	teacher: string;
-	block: string;
-	term?: string;
-	roomNumber: string;
-};
 
 const AddCourseScreen = () => {
 	const { colors } = useTheme();
@@ -26,7 +19,7 @@ const AddCourseScreen = () => {
 	const [courseTeacher, setCourseTeacher] = useState("");
 	const [courseBlock, setCourseBlock] = useState("");
 	const [term, setTerm] = useState("");
-	const [roomNumber, setRoomNumber] = useState("");
+	const [roomNumber, setRoomNumber] = useState(NaN);
 	const [addedCourses, setAddedCourses] = useState<Course[]>([]);
 
 	const blockOptions = [
@@ -56,17 +49,17 @@ const AddCourseScreen = () => {
 			teacher: courseTeacher,
 			block: courseBlock,
 			term: term || undefined,
-			roomNumber,
+			roomNumber: roomNumber,
 		};
 
 		setAddedCourses([...addedCourses, newCourse]);
-
+		updateCourses([...addedCourses, newCourse])
 		// Clear inputs
 		setCourseName("");
 		setCourseTeacher("");
 		setCourseBlock("");
 		setTerm("");
-		setRoomNumber("");
+		setRoomNumber(NaN);
 	};
 
 	return (
@@ -128,8 +121,8 @@ const AddCourseScreen = () => {
 					<>
 						<TextInput
 							label="Room Number"
-							value={roomNumber}
-							onChangeText={setRoomNumber}
+							value={(Number.isNaN(roomNumber)) ? "" : roomNumber.toString()}
+							onChangeText={(text) => setRoomNumber(Number(text))}
 							mode="outlined"
 							style={styles.input}
 							onSubmitEditing={Keyboard.dismiss}

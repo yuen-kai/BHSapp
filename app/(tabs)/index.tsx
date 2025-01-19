@@ -10,19 +10,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ProgressBar, MD3Colors } from "react-native-paper";
 import React, { useEffect } from "react";
 import { Font } from "react-native-paper/lib/typescript/types";
+import { Course, courses } from '@/config/coursesConfig';
 import { FlashList } from "@shopify/flash-list";
 import { clamp } from "react-native-reanimated";
 
 export default function HomeScreen() {
 	let currentCourse;
-	type Course = {
-		name: string;
-		teacher: string;
-		block: string;
-		term: string;
-		//  (string[])[5]
-		rmNum: number;
-	};
 
 	type Schedule = {
 		block: string;
@@ -44,22 +37,6 @@ export default function HomeScreen() {
 		return date;
 	};
 
-	let courses: Course[] = [
-		{ name: "English", teacher: "Mr. McGarry", block: "A", term: 'Full Year', rmNum: 324 },
-		{ name: "Math", teacher: "Ms. Smith", block: "B", term: 'Full Year', rmNum: 124 },
-		{ name: "Science", teacher: "Mr. Johnson", block: "C", term: 'Full Year', rmNum: 204 },
-		{ name: "History", teacher: "Mrs. Lee", block: "D", term: 'Full Year', rmNum: 304 },
-		{ name: "Art", teacher: "Mr. Brown", block: "E", term: 'Semester 2', rmNum: 404 },
-		{
-			name: "Physical Education",
-			teacher: "Ms. Davis",
-			block: "F",
-			term: 'Semester 1',
-			rmNum: 504,
-		},
-		{ name: "Music", teacher: "Mr. Wilson", block: "G", term: 'Full Year', rmNum: 604 },
-	];
-
 	let schedule: Schedule[] = [
 		{ block: "A", start: "8:20 am", end: "9:15 am" },
 		{ block: "B", start: "9:22 am", end: "10:17 am" },
@@ -70,7 +47,7 @@ export default function HomeScreen() {
 		{ block: "G", start: "2:00 pm", end: "2:55 pm" },
 	];
 
-	const [timeRemaining, setTimeRemaining] = React.useState(55);
+	const [timeRemaining, setTimeRemaining] = React.useState(0);
 
 	const findNearestStartTime = (): Date | null => {
 		const now = new Date();
@@ -133,7 +110,7 @@ export default function HomeScreen() {
 				<Card.Content>
 					<Text style={styles.courseInfoTitle}>{courses[0].name}</Text>
 					<Text style={styles.courseInfoSubTitle}>
-						{courses[0].teacher} • Room {courses[0].rmNum}
+						{courses[0].teacher} • Room {courses[0].roomNumber}
 					</Text>
 					<Text style={styles.courseInfoSubTitle}>
 						{courses[0].block} Block
@@ -188,7 +165,7 @@ export default function HomeScreen() {
 							<Card.Title title={item.name} titleStyle={styles.courseItemTitle} />
 							<Card.Content style={styles.courseItemContent}>
 								<Text style={styles.courseItemSubtitle}>{item.teacher}</Text>
-								<Text style={styles.courseItemSubtitle}>Room {item.rmNum}</Text>
+								<Text style={styles.courseItemSubtitle}>Room {item.roomNumber}</Text>
 								<Text style={styles.courseItemSubtitle}>Block {item.block}</Text>
 								<Text style={styles.courseItemSubtitle}>Term {item.term}</Text>
 								<Text style={styles.courseItemSubtitle}>Starts {times?.start}</Text>
