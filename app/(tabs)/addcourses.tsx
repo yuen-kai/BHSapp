@@ -136,11 +136,10 @@ const AddCourseScreen = () => {
 				>
 					Add Course
 				</Button>
-
 				<View style={styles.courseList}>
 					<Text style={styles.subTitle}>Added Courses</Text>
 					<FlashList
-						data={addedCourses}
+						data={courses}
 						keyExtractor={(item, index) => index.toString()}
 						renderItem={({ item }) => (
 							<CourseInfoCard
