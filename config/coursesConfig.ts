@@ -9,7 +9,7 @@ export type Course = {
 
 export let courses: Course[] = [];
 
-export const updateCourses = (newCourses: Course[]) => {
+export const sortCourses = (newCourses: Course[]) => {
   let newCourseList = [];
   let blockList = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
   let blockIndex = 0;
