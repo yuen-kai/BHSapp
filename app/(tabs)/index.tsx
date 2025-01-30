@@ -19,6 +19,7 @@ export default function HomeScreen() {
 		block: string;
 		start: string;
 		end: string;
+		lunch: boolean
 	};
 
 	const convertToDate = (time: string): Date => {
@@ -36,57 +37,45 @@ export default function HomeScreen() {
 	};
 
 	let schedule: Schedule[] = [
-		{ block: "A", start: "8:20 am", end: "9:15 am" },
-		{ block: "B", start: "9:22 am", end: "10:17 am" },
-		{ block: "C", start: "10:24 am", end: "11:19 am" },
-		{ block: "D", start: "11:26 am", end: "12:21 pm" },
-		{ block: "E", start: "12:24 pm", end: "12:51 pm" },
-		{ block: "F", start: "12:58 pm", end: "1:53 pm" },
-		{ block: "G", start: "2:00 pm", end: "2:55 pm" },
+		{ block: "A", start: "8:20 am", end: "9:15 am", lunch: false },
+		{ block: "B", start: "9:22 am", end: "10:17 am", lunch: false },
+		{ block: "C", start: "10:24 am", end: "11:19 am", lunch: false },
+		{ block: "D", start: "11:26 am", end: "12:21 pm", lunch: false },
+		{ block: "E", start: "12:24 pm", end: "12:51 pm", lunch: true },
+		{ block: "F", start: "12:58 pm", end: "1:53 pm", lunch: false },
+		{ block: "G", start: "2:00 pm", end: "2:55 pm", lunch: false },
 	];
 
 	const [timeRemaining, setTimeRemaining] = React.useState(0);
 
-	const findNearestStartTime = (): Date | null => {
-		const now = new Date();
-		for (let i = 0; i < schedule.length; i++) {
-		  const startTime = convertToDate(schedule[i].start);
-		  if (startTime > now) {
-			return convertToDate(schedule[i-1].start);
-		  }
-		}
-		return convertToDate(schedule[schedule.length-1].start);
-	};
-	const findCurrentBlock = (): String | null => {
+	const findCurrentBlock = (): Schedule | null => {
 		const now = new Date();
 		for (let i = 0; i < schedule.length; i++) {
 			const startTime = convertToDate(schedule[i].start);
 			const endTime = convertToDate(schedule[i].end);
-			if (endTime > now) {
-			  return schedule[i].block;
+			if (startTime < now && now < endTime) {
+				return schedule[i]
 			}
-		  }
-		return 'N/A';
-	};
-	const findNearestFutureEndTime = (): Date | null => {
-		const now = new Date();
-		for (let i = 0; i < schedule.length; i++) {
-		  const endTime = convertToDate(schedule[i].end);
-		  if (endTime > now) {
-			return endTime;
-		  }
+			if( i + 1 < schedule.length && endTime < now && now < convertToDate(schedule[i+1].start)) {
+				return { block: "Transition", start: schedule[i].end, end: schedule[i+1].start, lunch: false };
+			}
+			if( i + 1 === schedule.length && endTime < now) {
+				return { block: "After School", start: schedule[i].end, end: "No End Time", lunch: false };
+			}
 		}
-		return null;
+		return { block: "No Class", start: "No Start Time", end: "No End Time", lunch: false };
 	};
+
 	const findCurrentClass = (): Course | null => {
 		const now = new Date();
 		for (let i = 0; i < courses.length; i++) {
-			if (courses[i].block === findCurrentBlock()) {
+			if (courses[i].block === findCurrentBlock()?.block) {
 				return courses[i];
 			}
 		}
 		return null;
 	}
+
 	function getDifferenceInMinutes(currentDate: Date, endTime: Date) {
 		return Math.max(
 			0,
@@ -95,7 +84,7 @@ export default function HomeScreen() {
 	}
 	function secondsUntilNextMinute() {
 		const now = new Date();
-		return (60 - now.getSeconds())-1;
+		return (60 - now.getSeconds()) - 1;
 	}
 	const [nearestStartTime, setNearestStartTime] = React.useState(findNearestStartTime())
 	const [nearestEndTime, setNearestEndTime] = React.useState(findNearestFutureEndTime())
@@ -105,8 +94,8 @@ export default function HomeScreen() {
 			setNearestStartTime(findNearestStartTime());
 			setNearestEndTime(findNearestFutureEndTime());
 			if (nearestEndTime && nearestStartTime && nearestStartTime < new Date()) {
-        		setTimeRemaining(getDifferenceInMinutes(new Date(), nearestEndTime));
-      		} else {//supposed to indicate non-block time such as transition and outside hours but i doubt it works, maybe introduce variable if its transition time or office hours or active block or something like that?
+				setTimeRemaining(getDifferenceInMinutes(new Date(), nearestEndTime));
+			} else {//supposed to indicate non-block time such as transition and outside hours but i doubt it works, maybe introduce variable if its transition time or office hours or active block or something like that?
 				if (nearestStartTime) {
 					console.log(getDifferenceInMinutes(new Date(), nearestStartTime))
 					setTimeRemaining(getDifferenceInMinutes(new Date(), nearestStartTime));
@@ -114,9 +103,9 @@ export default function HomeScreen() {
 			}
 			if (nearestStartTime && nearestEndTime) {//still sometimes loss in precision in certain minutes, sometimes 55.00000001 or smth
 				const totalMinutes = getDifferenceInMinutes(nearestStartTime, nearestEndTime);
-        		const remainingMinutes = getDifferenceInMinutes(new Date(), nearestEndTime);
-        		const progressValue = clamp((totalMinutes - remainingMinutes) / totalMinutes, 0, 1);
-        		setProgress(Number(progressValue.toFixed(2)));
+				const remainingMinutes = getDifferenceInMinutes(new Date(), nearestEndTime);
+				const progressValue = clamp((totalMinutes - remainingMinutes) / totalMinutes, 0, 1);
+				setProgress(Number(progressValue.toFixed(2)));
 			}
 		}, 1000);
 		return () => clearInterval(interval);
@@ -177,11 +166,11 @@ export default function HomeScreen() {
 						color: isDarkMode ? "white" : "black",
 					}}
 				>
-					{timeRemaining}:{(secondsUntilNextMinute() >= 10) ? secondsUntilNextMinute() : '0'+secondsUntilNextMinute()} left
+					{timeRemaining}:{(secondsUntilNextMinute() >= 10) ? secondsUntilNextMinute() : '0' + secondsUntilNextMinute()} left
 				</Text>
 			</View>
 
-      {/* Course List */}
+			{/* Course List */}
 			<FlashList
 				data={courses}
 				keyExtractor={(item, index) => `${item.name}-${index}`}//formerly for item.block but item.block is not unique
