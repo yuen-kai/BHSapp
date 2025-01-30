@@ -10,20 +10,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ProgressBar, MD3Colors } from "react-native-paper";
 import React, { useEffect } from "react";
 import { Font } from "react-native-paper/lib/typescript/types";
+import { Course, courses } from '@/config/coursesConfig';
 import { FlashList } from "@shopify/flash-list";
 import { clamp } from "react-native-reanimated";
 
 export default function HomeScreen() {
-	let currentCourse;
-	type Course = {
-		name: string;
-		teacher: string;
-		block: string;
-		term: string;
-		//  (string[])[5]
-		rmNum: number;
-	};
-
 	type Schedule = {
 		block: string;
 		start: string;
@@ -44,22 +35,6 @@ export default function HomeScreen() {
 		return date;
 	};
 
-	let courses: Course[] = [
-		{ name: "English", teacher: "Mr. McGarry", block: "A", term: 'Full Year', rmNum: 324 },
-		{ name: "Math", teacher: "Ms. Smith", block: "B", term: 'Full Year', rmNum: 124 },
-		{ name: "Science", teacher: "Mr. Johnson", block: "C", term: 'Full Year', rmNum: 204 },
-		{ name: "History", teacher: "Mrs. Lee", block: "D", term: 'Full Year', rmNum: 304 },
-		{ name: "Art", teacher: "Mr. Brown", block: "E", term: 'Semester 2', rmNum: 404 },
-		{
-			name: "Physical Education",
-			teacher: "Ms. Davis",
-			block: "F",
-			term: 'Semester 1',
-			rmNum: 504,
-		},
-		{ name: "Music", teacher: "Mr. Wilson", block: "G", term: 'Full Year', rmNum: 604 },
-	];
-
 	let schedule: Schedule[] = [
 		{ block: "A", start: "8:20 am", end: "9:15 am" },
 		{ block: "B", start: "9:22 am", end: "10:17 am" },
@@ -70,7 +45,7 @@ export default function HomeScreen() {
 		{ block: "G", start: "2:00 pm", end: "2:55 pm" },
 	];
 
-	const [timeRemaining, setTimeRemaining] = React.useState(55);
+	const [timeRemaining, setTimeRemaining] = React.useState(0);
 
 	const findNearestStartTime = (): Date | null => {
 		const now = new Date();
@@ -82,7 +57,17 @@ export default function HomeScreen() {
 		}
 		return convertToDate(schedule[schedule.length-1].start);
 	};
-
+	const findCurrentBlock = (): String | null => {
+		const now = new Date();
+		for (let i = 0; i < schedule.length; i++) {
+			const startTime = convertToDate(schedule[i].start);
+			const endTime = convertToDate(schedule[i].end);
+			if (endTime > now) {
+			  return schedule[i].block;
+			}
+		  }
+		return 'N/A';
+	};
 	const findNearestFutureEndTime = (): Date | null => {
 		const now = new Date();
 		for (let i = 0; i < schedule.length; i++) {
@@ -93,13 +78,25 @@ export default function HomeScreen() {
 		}
 		return null;
 	};
+	const findCurrentClass = (): Course | null => {
+		const now = new Date();
+		for (let i = 0; i < courses.length; i++) {
+			if (courses[i].block === findCurrentBlock()) {
+				return courses[i];
+			}
+		}
+		return null;
+	}
 	function getDifferenceInMinutes(currentDate: Date, endTime: Date) {
 		return Math.max(
 			0,
-			Math.round((endTime.getTime() - currentDate.getTime()) / (1000 * 60))
+			Math.floor((endTime.getTime() - currentDate.getTime()) / (1000 * 60))
 		);
 	}
-
+	function secondsUntilNextMinute() {
+		const now = new Date();
+		return (60 - now.getSeconds())-1;
+	}
 	const [nearestStartTime, setNearestStartTime] = React.useState(findNearestStartTime())
 	const [nearestEndTime, setNearestEndTime] = React.useState(findNearestFutureEndTime())
 	const [progress, setProgress] = React.useState(0);
@@ -107,11 +104,20 @@ export default function HomeScreen() {
 		const interval = setInterval(() => {
 			setNearestStartTime(findNearestStartTime());
 			setNearestEndTime(findNearestFutureEndTime());
-     		if (nearestEndTime) {
+			if (nearestEndTime && nearestStartTime && nearestStartTime < new Date()) {
         		setTimeRemaining(getDifferenceInMinutes(new Date(), nearestEndTime));
-      		}
-			if (nearestStartTime && nearestEndTime) {
-				setProgress(parseFloat(clamp(((getDifferenceInMinutes(nearestStartTime, nearestEndTime) - getDifferenceInMinutes(new Date(), nearestEndTime)) / getDifferenceInMinutes(nearestStartTime, nearestEndTime)), 0, 1).toFixed(2)));
+      		} else {//supposed to indicate non-block time such as transition and outside hours but i doubt it works, maybe introduce variable if its transition time or office hours or active block or something like that?
+				if (nearestStartTime) {
+					console.log(getDifferenceInMinutes(new Date(), nearestStartTime))
+					setTimeRemaining(getDifferenceInMinutes(new Date(), nearestStartTime));
+				}
+			}
+			if (nearestStartTime && nearestEndTime) {//still sometimes loss in precision in certain minutes, sometimes 55.00000001 or smth
+				const totalMinutes = getDifferenceInMinutes(nearestStartTime, nearestEndTime);
+        		const remainingMinutes = getDifferenceInMinutes(new Date(), nearestEndTime);
+        		const progressValue = clamp((totalMinutes - remainingMinutes) / totalMinutes, 0, 1);
+				console.log(Number(progressValue.toFixed(2)))
+        		setProgress(Number(progressValue.toFixed(2)));
 			}
 		}, 1000);
 		return () => clearInterval(interval);
@@ -131,12 +137,12 @@ export default function HomeScreen() {
 			{/* Course Info Card */}
 			<Card style={styles.courseCard}>
 				<Card.Content>
-					<Text style={styles.courseInfoTitle}>{courses[0].name}</Text>
+					<Text style={styles.courseInfoTitle}>{findCurrentClass()?.name || 'No Class'}</Text>
 					<Text style={styles.courseInfoSubTitle}>
-						{courses[0].teacher} • Room {courses[0].rmNum}
+						{findCurrentClass()?.teacher || 'No Teacher'} • Room {findCurrentClass()?.roomNumber || 'N/A'}
 					</Text>
 					<Text style={styles.courseInfoSubTitle}>
-						{courses[0].block} Block
+						{findCurrentBlock() ? findCurrentBlock() : 'No Block'} Block
 					</Text>
 				</Card.Content>
 			</Card>
@@ -168,19 +174,19 @@ export default function HomeScreen() {
 						left: "50%",
 						top: "50%",
 						transform: [{ translateX: "-50%" }, { translateY: "-50%" }],
-						fontSize: 28,
+						fontSize: 36,//formerly 28
 						color: isDarkMode ? "white" : "black",
 					}}
 				>
-					{timeRemaining} minute{timeRemaining == 1 ? "" : "s"} remaining
+					{timeRemaining}:{(secondsUntilNextMinute() >= 10) ? secondsUntilNextMinute() : '0'+secondsUntilNextMinute()} left
 				</Text>
 			</View>
 
       {/* Course List */}
 			<FlashList
 				data={courses}
-				keyExtractor={(item) => item.block}
-				estimatedItemSize={80}
+				keyExtractor={(item, index) => `${item.name}-${index}`}//formerly for item.block but item.block is not unique
+				estimatedItemSize={100}
 				renderItem={({ item }) => {
 					const times = schedule.find((s) => s.block === item.block);
 					return (
@@ -188,7 +194,7 @@ export default function HomeScreen() {
 							<Card.Title title={item.name} titleStyle={styles.courseItemTitle} />
 							<Card.Content style={styles.courseItemContent}>
 								<Text style={styles.courseItemSubtitle}>{item.teacher}</Text>
-								<Text style={styles.courseItemSubtitle}>Room {item.rmNum}</Text>
+								<Text style={styles.courseItemSubtitle}>Room {item.roomNumber}</Text>
 								<Text style={styles.courseItemSubtitle}>Block {item.block}</Text>
 								<Text style={styles.courseItemSubtitle}>Term {item.term}</Text>
 								<Text style={styles.courseItemSubtitle}>Starts {times?.start}</Text>
@@ -209,8 +215,8 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 		height: "31%",
 	},
-	courseInfoTitle: {
-		fontSize: 48,
+	courseInfoTitle: {//course names like American Studies Hsty H need to fit. initially font size 48
+		fontSize: 36,
 		textAlign: "center",
 		marginTop: "10%",
 	},
