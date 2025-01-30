@@ -13,15 +13,6 @@ import { FlashList } from "@shopify/flash-list";
 import { Course, courses, updateCourses } from '@/config/coursesConfig';
 import CourseInfoCard from "@/components/CourseInfoCard";
 
-type Course = {
-	name: string;
-	teacher: string;
-	block: string;
-	lunch: number; // 1 = first lunch, 2 = 2nd lunch
-	term: number;  // 0 = full year, 1 = first semester, 2 = 2nd semester
-	roomNumber: string;
-};
-
 const AddCourseScreen = () => {
 	const { colors } = useTheme();
 	const [courseName, setCourseName] = useState("");
