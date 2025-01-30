@@ -16,6 +16,7 @@ const CourseInfoCard: React.FC<Course> = ({
 	name,
 	teacher,
 	block,
+	lunch,
 	term,
 	roomNumber,
 }) => {
@@ -31,6 +32,9 @@ const CourseInfoCard: React.FC<Course> = ({
 			</Text>
 			<Text style={styles.courseText}>
 				<Text style={styles.bold}>Block:</Text> {block}
+			</Text>
+			<Text style={styles.courseText}>
+				<Text style={styles.bold}>Lunch:</Text> {lunch}
 			</Text>
 			{term && (
 				<Text style={styles.courseText}>

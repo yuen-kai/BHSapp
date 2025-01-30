@@ -34,14 +34,14 @@ const AddCourseScreen = () => {
 	];
 
 	const lunchOptions = [
-		{ label: "Lunch 1", value: 1 },
-		{ label: "Lunch 2", value: 2 },
+		{ label: "Lunch 1", value: '1' },
+		{ label: "Lunch 2", value: '2' },
 	];
 
 	const termOptions = [
-		{ label: "Semester 1", value: 1 },
-		{ label: "Semester 2", value: 2 },
-		{ label: "Full Year", value: 0 },
+		{ label: "Semester 1", value: '1' },
+		{ label: "Semester 2", value: '2' },
+		{ label: "Full Year", value: '3' },
 	];
 
 	const handleAddCourse = () => {
@@ -113,6 +113,20 @@ const AddCourseScreen = () => {
 				</View>
 				<View style={styles.input}>
 					<Dropdown
+						options={lunchOptions}
+						label="Lunch"
+						placeholder="Select Lunch"
+						value={courseLunch.toString()}
+						onSelect={(value) => setLunch(Number(value) || NaN)}
+						mode={"outlined"}
+
+						// style={[styles.input, styles.dropdown]}
+						// placeholderStyle={styles.placeholderStyle}
+						// selectedTextStyle={styles.selectedTextStyle}
+					/>
+				</View>
+				<View style={styles.input}>
+					<Dropdown
 						options={termOptions}
 						label="Term"
 						placeholder="Select Term"
@@ -154,6 +168,7 @@ const AddCourseScreen = () => {
 								name={item.name}
 								teacher={item.teacher}
 								block={item.block}
+								lunch={item.lunch}
 								term={item.term}
 								roomNumber={item.roomNumber}/>
 						)}
