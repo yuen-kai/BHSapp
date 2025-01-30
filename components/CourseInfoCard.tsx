@@ -10,16 +10,9 @@ import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { useTheme, Text, TextInput, Button } from "react-native-paper";
 import { Dropdown } from "react-native-paper-dropdown";
 import { FlashList } from "@shopify/flash-list";
+import { Course } from '@/config/coursesConfig';
 
-interface CourseProps {
-	name: string;
-	teacher: string;
-	block: string;
-	term?: string;
-	roomNumber: number;
-}
-
-const CourseInfoCard: React.FC<CourseProps> = ({
+const CourseInfoCard: React.FC<Course> = ({
 	name,
 	teacher,
 	block,
@@ -41,7 +34,7 @@ const CourseInfoCard: React.FC<CourseProps> = ({
 			</Text>
 			{term && (
 				<Text style={styles.courseText}>
-					<Text style={styles.bold}>Term:</Text> {term}
+					<Text style={styles.bold}>Term:</Text> {term==0?"Full Year":term==1?"Semester 1":"Semester 2"}
 				</Text>
 			)}
 			<Text style={styles.courseText}>
