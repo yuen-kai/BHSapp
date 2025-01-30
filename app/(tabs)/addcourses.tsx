@@ -18,8 +18,9 @@ const AddCourseScreen = () => {
 	const [courseName, setCourseName] = useState("");
 	const [courseTeacher, setCourseTeacher] = useState("");
 	const [courseBlock, setCourseBlock] = useState("");
-	const [term, setTerm] = useState("");
-	const [roomNumber, setRoomNumber] = useState(NaN);
+	const [courseLunch, setLunch] = useState(NaN);
+	const [term, setTerm] = useState(NaN);
+	const [roomNumber, setRoomNumber] = useState("");
 	const [addedCourses, setAddedCourses] = useState<Course[]>([]);
 
 	const blockOptions = [
@@ -32,10 +33,15 @@ const AddCourseScreen = () => {
 		{ label: "G", value: "G" },
 	];
 
+	const lunchOptions = [
+		{ label: "Lunch 1", value: 1 },
+		{ label: "Lunch 2", value: 2 },
+	];
+
 	const termOptions = [
-		{ label: "Semester 1", value: "S1" },
-		{ label: "Semester 2", value: "S2" },
-		{ label: "Full Year", value: "FY" },
+		{ label: "Semester 1", value: 1 },
+		{ label: "Semester 2", value: 2 },
+		{ label: "Full Year", value: 0 },
 	];
 
 	const handleAddCourse = () => {
@@ -48,7 +54,8 @@ const AddCourseScreen = () => {
 			name: courseName,
 			teacher: courseTeacher,
 			block: courseBlock,
-			term: term || undefined,
+			lunch: courseLunch,
+			term: term,
 			roomNumber: roomNumber,
 		};
 
@@ -58,8 +65,9 @@ const AddCourseScreen = () => {
 		setCourseName("");
 		setCourseTeacher("");
 		setCourseBlock("");
-		setTerm("");
-		setRoomNumber(NaN);
+		setLunch(NaN);
+		setTerm(NaN);
+		setRoomNumber("");
 	};
 
 	return (
@@ -108,8 +116,8 @@ const AddCourseScreen = () => {
 						options={termOptions}
 						label="Term"
 						placeholder="Select Term"
-						value={term}
-						onSelect={(value) => setTerm(value || "")}
+						value={term.toString()}
+						onSelect={(value) => setTerm(Number(value) || NaN)}
 						mode={"outlined"}
 
 						// style={[styles.input, styles.dropdown]}
@@ -121,8 +129,8 @@ const AddCourseScreen = () => {
 					<>
 						<TextInput
 							label="Room Number"
-							value={(Number.isNaN(roomNumber)) ? "" : roomNumber.toString()}
-							onChangeText={(text) => setRoomNumber(Number(text))}
+							value={roomNumber}
+							onChangeText={(text) => setRoomNumber(text)}
 							mode="outlined"
 							style={styles.input}
 							onSubmitEditing={Keyboard.dismiss}

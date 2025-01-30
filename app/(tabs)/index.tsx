@@ -116,7 +116,6 @@ export default function HomeScreen() {
 				const totalMinutes = getDifferenceInMinutes(nearestStartTime, nearestEndTime);
         		const remainingMinutes = getDifferenceInMinutes(new Date(), nearestEndTime);
         		const progressValue = clamp((totalMinutes - remainingMinutes) / totalMinutes, 0, 1);
-				console.log(Number(progressValue.toFixed(2)))
         		setProgress(Number(progressValue.toFixed(2)));
 			}
 		}, 1000);
