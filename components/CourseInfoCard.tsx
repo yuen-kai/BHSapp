@@ -38,7 +38,7 @@ const CourseInfoCard: React.FC<Course> = ({
 			</Text>
 			{term && (
 				<Text style={styles.courseText}>
-					<Text style={styles.bold}>Term:</Text> {term==0?"Full Year":term==1?"Semester 1":"Semester 2"}
+					<Text style={styles.bold}>Term:</Text> {term==3?"Full Year":term==1?"Semester 1":"Semester 2"}
 				</Text>
 			)}
 			<Text style={styles.courseText}>

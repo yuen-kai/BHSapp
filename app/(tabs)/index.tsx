@@ -69,7 +69,7 @@ export default function HomeScreen() {
 	const findCurrentClass = (): Course | null => {
 		const now = new Date();
 		for (let i = 0; i < courses.length; i++) {
-			if (courses[i].block === findCurrentBlock()?.block) {
+			if (courses[i].block === findCurrentBlock()?.block) {//also at some point add a check for s1 or s2
 				return courses[i];
 			}
 		}
@@ -86,13 +86,13 @@ export default function HomeScreen() {
 		const now = new Date();
 		return (60 - now.getSeconds()) - 1;
 	}
-	const [nearestStartTime, setNearestStartTime] = React.useState(findNearestStartTime())
-	const [nearestEndTime, setNearestEndTime] = React.useState(findNearestFutureEndTime())
+	const [nearestStartTime, setNearestStartTime] = React.useState<Date>(convertToDate(findCurrentBlock()?.start || "8:20 am"))
+	const [nearestEndTime, setNearestEndTime] = React.useState<Date>(convertToDate(findCurrentBlock()?.end || "2:55 pm"))//placeholder default values
 	const [progress, setProgress] = React.useState(0);
 	useEffect(() => {
 		const interval = setInterval(() => {
-			setNearestStartTime(findNearestStartTime());
-			setNearestEndTime(findNearestFutureEndTime());
+			setNearestStartTime(convertToDate(findCurrentBlock()?.start || "8:20 am"));
+			setNearestEndTime(convertToDate(findCurrentBlock()?.end || "2:55 pm"));
 			if (nearestEndTime && nearestStartTime && nearestStartTime < new Date()) {
 				setTimeRemaining(getDifferenceInMinutes(new Date(), nearestEndTime));
 			} else {//supposed to indicate non-block time such as transition and outside hours but i doubt it works, maybe introduce variable if its transition time or office hours or active block or something like that?
@@ -105,7 +105,7 @@ export default function HomeScreen() {
 				const totalMinutes = getDifferenceInMinutes(nearestStartTime, nearestEndTime);
 				const remainingMinutes = getDifferenceInMinutes(new Date(), nearestEndTime);
 				const progressValue = clamp((totalMinutes - remainingMinutes) / totalMinutes, 0, 1);
-				setProgress(Number(progressValue.toFixed(2)));
+				setProgress(Number(progressValue.toFixed(2)) || 0);
 			}
 		}, 1000);
 		return () => clearInterval(interval);
@@ -130,7 +130,7 @@ export default function HomeScreen() {
 						{findCurrentClass()?.teacher || 'No Teacher'} • Room {findCurrentClass()?.roomNumber || 'N/A'}
 					</Text>
 					<Text style={styles.courseInfoSubTitle}>
-						{findCurrentBlock() ? findCurrentBlock() : 'No Block'} Block
+						{findCurrentBlock() ? findCurrentBlock()?.block : 'No Block'} Block
 					</Text>
 				</Card.Content>
 			</Card>
@@ -166,7 +166,7 @@ export default function HomeScreen() {
 						color: isDarkMode ? "white" : "black",
 					}}
 				>
-					{timeRemaining}:{(secondsUntilNextMinute() >= 10) ? secondsUntilNextMinute() : '0' + secondsUntilNextMinute()} left
+					{(findCurrentBlock()?.block != "After School" && findCurrentBlock()?.block != "Transition") ? `${timeRemaining}:${(secondsUntilNextMinute() >= 10) ? secondsUntilNextMinute() : '0' + secondsUntilNextMinute()} left` : findCurrentBlock()?.block}
 				</Text>
 			</View>
 
@@ -184,7 +184,8 @@ export default function HomeScreen() {
 								<Text style={styles.courseItemSubtitle}>{item.teacher}</Text>
 								<Text style={styles.courseItemSubtitle}>Room {item.roomNumber}</Text>
 								<Text style={styles.courseItemSubtitle}>Block {item.block}</Text>
-								<Text style={styles.courseItemSubtitle}>Term {item.term}</Text>
+								<Text style={styles.courseItemSubtitle}>Lunch {item.lunch}</Text>
+								<Text style={styles.courseItemSubtitle}>Term {(item.term == 3) ? 'Full Year': item.term}</Text>
 								<Text style={styles.courseItemSubtitle}>Starts {times?.start}</Text>
 								<Text style={styles.courseItemSubtitle}>Ends {times?.end}</Text>
 							</Card.Content>
