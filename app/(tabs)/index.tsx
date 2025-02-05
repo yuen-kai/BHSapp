@@ -36,16 +36,63 @@ export default function HomeScreen() {
 		return date;
 	};
 
-	let schedule: Schedule[] = [
-		{ block: "A", start: "8:20 am", end: "9:15 am", lunch: false },
-		{ block: "B", start: "9:22 am", end: "10:17 am", lunch: false },
-		{ block: "C", start: "10:24 am", end: "11:19 am", lunch: false },
-		{ block: "D", start: "11:26 am", end: "12:21 pm", lunch: false },
-		{ block: "E", start: "12:24 pm", end: "12:51 pm", lunch: true },
-		{ block: "F", start: "12:58 pm", end: "1:53 pm", lunch: false },
-		{ block: "G", start: "2:00 pm", end: "2:55 pm", lunch: false },
-	];
+	const weekDaySchedule = [
+		{
+			blocks: [
+			  { block: "A", start: "8:20 am", end: "9:15 am", lunch: false },
+			  { block: "B", start: "9:22 am", end: "10:17 am", lunch: false },
+			  { block: "D", start: "10:24 am", end: "11:19 am", lunch: false },
+			  { block: "E", start: "11:26 am", end: "12:21 pm", lunch: true },
+			  { block: "E", start: "11:56 am", end: "12:51 pm", lunch: true },
+			  { block: "F", start: "12:58 pm", end: "1:53 pm", lunch: false },
+			  { block: "G", start: "2:00 pm", end: "2:55 pm", lunch: false }
+			]
+		  },
+		{
+			blocks: [
+			  { block: "C", start: "8:20 am", end: "9:15 am", lunch: false },
+			  { block: "B", start: "9:22 am", end: "10:17 am", lunch: false },
+			  { block: "D", start: "10:24 am", end: "11:19 am", lunch: false },
+			  { block: "E", start: "11:26 am", end: "12:21 pm", lunch: true },
+			  { block: "E", start: "11:56 am", end: "12:51 pm", lunch: true },
+			  { block: "F", start: "12:58 pm", end: "1:53 pm", lunch: false },
+			  { block: "G", start: "2:00 pm", end: "2:55 pm", lunch: false }
+			]
+			},
+		{
+			blocks: [
+			  { block: "A", start: "8:20 am", end: "9:15 am", lunch: false },//still needs change
+			  { block: "T", start: "9:20 am", end: "9:57 am", lunch: false },
+			  { block: "C", start: "10:03 am", end: "10:58 am", lunch: false },
+			  { block: "X", start: "11:05 am", end: "11:42 am", lunch: false },
+			  { block: "D", start: "11:49 am", end: "1:14 pm", lunch: true },
+			  { block: "E", start: "1:21 pm", end: "2:16 pm", lunch: false },
+			]
+			},
+		{
+			blocks: [
+			  { block: "A", start: "8:20 am", end: "9:15 am", lunch: false },
+			  { block: "B", start: "9:22 am", end: "10:17 am", lunch: false },
+			  { block: "C", start: "10:24 am", end: "11:19 am", lunch: false },
+			  { block: "G", start: "11:26 am", end: "12:50 pm", lunch: false },
+			  { block: "E", start: "12:51 pm", end: "1:53 pm", lunch: true },
+			  { block: "F", start: "2:00 pm", end: "2:55 pm", lunch: false },
+			]
+			},
+		{
+			blocks: [
+			  { block: "A", start: "8:20 am", end: "9:15 am", lunch: false },
+			  { block: "B", start: "9:22 am", end: "10:17 am", lunch: false },
+			  { block: "C", start: "10:24 am", end: "11:19 am", lunch: false },
+			  { block: "D", start: "11:26 am", end: "12:50 pm", lunch: false },
+			  { block: "F", start: "12:51 pm", end: "1:53 pm", lunch: true },
+			  { block: "G", start: "2:00 pm", end: "2:55 pm", lunch: false },
+			]
+			}
+	]
 
+	let schedule: Schedule[] = weekDaySchedule[new Date().getDay()-1].blocks;
+	
 	const [timeRemaining, setTimeRemaining] = React.useState(0);
 
 	const findCurrentBlock = (): Schedule | null => {
@@ -54,6 +101,7 @@ export default function HomeScreen() {
 			const startTime = convertToDate(schedule[i].start);
 			const endTime = convertToDate(schedule[i].end);
 			if (startTime < now && now < endTime) {
+				console.log(startTime, endTime, schedule[i])
 				return schedule[i]
 			}
 			if( i + 1 < schedule.length && endTime < now && now < convertToDate(schedule[i+1].start)) {
@@ -105,7 +153,7 @@ export default function HomeScreen() {
 				const totalMinutes = getDifferenceInMinutes(nearestStartTime, nearestEndTime);
 				const remainingMinutes = getDifferenceInMinutes(new Date(), nearestEndTime);
 				const progressValue = clamp((totalMinutes - remainingMinutes) / totalMinutes, 0, 1);
-				setProgress(Number(progressValue.toFixed(2)) || 0);
+				setProgress(Math.round(progressValue * 100) / 100 || 0);
 			}
 		}, 1000);
 		return () => clearInterval(interval);
