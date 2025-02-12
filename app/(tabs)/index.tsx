@@ -37,65 +37,55 @@ export default function HomeScreen() {
 	};
 
 	const weekDaySchedule = [
-		{
-			blocks: [
-			  { block: "A", start: "8:20 am", end: "9:15 am", lunch: false },
-			  { block: "B", start: "9:22 am", end: "10:17 am", lunch: false },
-			  { block: "D", start: "10:24 am", end: "11:19 am", lunch: false },
-			  { block: "E", start: "11:26 am", end: "12:21 pm", lunch: true },
-			  { block: "E", start: "11:56 am", end: "12:51 pm", lunch: true },
-			  { block: "F", start: "12:58 pm", end: "1:53 pm", lunch: false },
-			  { block: "G", start: "2:00 pm", end: "2:55 pm", lunch: false }
-			]
-		  },
-		{
-			blocks: [
-			  { block: "C", start: "8:20 am", end: "9:15 am", lunch: false },
-			  { block: "B", start: "9:22 am", end: "10:17 am", lunch: false },
-			  { block: "D", start: "10:24 am", end: "11:19 am", lunch: false },
-			  { block: "E", start: "11:26 am", end: "12:21 pm", lunch: true },
-			  { block: "E", start: "11:56 am", end: "12:51 pm", lunch: true },
-			  { block: "F", start: "12:58 pm", end: "1:53 pm", lunch: false },
-			  { block: "G", start: "2:00 pm", end: "2:55 pm", lunch: false }
-			]
-			},
-		{
-			blocks: [
-			  { block: "A", start: "8:20 am", end: "9:15 am", lunch: false },//still needs change
-			  { block: "T", start: "9:20 am", end: "9:57 am", lunch: false },
-			  { block: "C", start: "10:03 am", end: "10:58 am", lunch: false },
-			  { block: "X", start: "11:05 am", end: "11:42 am", lunch: false },
-			  { block: "D", start: "11:49 am", end: "1:14 pm", lunch: true },
-			  { block: "E", start: "1:21 pm", end: "2:16 pm", lunch: false },
-			]
-			},
-		{
-			blocks: [
-			  { block: "A", start: "8:20 am", end: "9:15 am", lunch: false },
-			  { block: "B", start: "9:22 am", end: "10:17 am", lunch: false },
-			  { block: "C", start: "10:24 am", end: "11:19 am", lunch: false },
-			  { block: "G", start: "11:26 am", end: "12:50 pm", lunch: false },
-			  { block: "E", start: "12:51 pm", end: "1:53 pm", lunch: true },
-			  { block: "F", start: "2:00 pm", end: "2:55 pm", lunch: false },
-			]
-			},
-		{
-			blocks: [
-			  { block: "A", start: "8:20 am", end: "9:15 am", lunch: false },
-			  { block: "B", start: "9:22 am", end: "10:17 am", lunch: false },
-			  { block: "C", start: "10:24 am", end: "11:19 am", lunch: false },
-			  { block: "D", start: "11:26 am", end: "12:50 pm", lunch: false },
-			  { block: "F", start: "12:51 pm", end: "1:53 pm", lunch: true },
-			  { block: "G", start: "2:00 pm", end: "2:55 pm", lunch: false },
-			]
-			}
-	]
+		[
+			{ block: "A", start: "8:20 am", end: "9:15 am", lunch: false },
+			{ block: "B", start: "9:22 am", end: "10:17 am", lunch: false },
+			{ block: "D", start: "10:24 am", end: "11:19 am", lunch: false },
+			{ block: "E", start: "11:26 am", end: "12:21 pm", lunch: true },
+			{ block: "E", start: "11:56 am", end: "12:51 pm", lunch: true },
+			{ block: "F", start: "12:58 pm", end: "1:53 pm", lunch: false },
+			{ block: "G", start: "2:00 pm", end: "2:55 pm", lunch: false }
+		],
+		[
+			{ block: "C", start: "8:20 am", end: "9:15 am", lunch: false },
+			{ block: "B", start: "9:22 am", end: "10:17 am", lunch: false },
+			{ block: "D", start: "10:24 am", end: "11:19 am", lunch: false },
+			{ block: "E", start: "11:26 am", end: "12:21 pm", lunch: true },
+			{ block: "E", start: "11:56 am", end: "12:51 pm", lunch: true },
+			{ block: "F", start: "12:58 pm", end: "1:53 pm", lunch: false },
+			{ block: "G", start: "2:00 pm", end: "2:55 pm", lunch: false }
+		],
+		[
+			{ block: "A", start: "8:20 am", end: "9:15 am", lunch: false },
+			{ block: "T", start: "9:20 am", end: "9:57 am", lunch: false },
+			{ block: "C", start: "10:03 am", end: "10:58 am", lunch: false },
+			{ block: "X", start: "11:05 am", end: "11:42 am", lunch: false },
+			{ block: "D", start: "11:49 am", end: "1:14 pm", lunch: true },
+			{ block: "E", start: "1:21 pm", end: "2:16 pm", lunch: false }
+		],
+		[
+			{ block: "A", start: "8:20 am", end: "9:15 am", lunch: false },
+			{ block: "B", start: "9:22 am", end: "10:17 am", lunch: false },
+			{ block: "C", start: "10:24 am", end: "11:19 am", lunch: false },
+			{ block: "G", start: "11:26 am", end: "12:50 pm", lunch: false },
+			{ block: "E", start: "12:51 pm", end: "1:53 pm", lunch: true },
+			{ block: "F", start: "2:00 pm", end: "2:55 pm", lunch: false }
+		],
+		[
+			{ block: "A", start: "8:20 am", end: "9:15 am", lunch: false },
+			{ block: "B", start: "9:22 am", end: "10:17 am", lunch: false },
+			{ block: "C", start: "10:24 am", end: "11:19 am", lunch: false },
+			{ block: "D", start: "11:26 am", end: "12:50 pm", lunch: false },
+			{ block: "F", start: "12:51 pm", end: "1:53 pm", lunch: true },
+			{ block: "G", start: "2:00 pm", end: "2:55 pm", lunch: false }
+		]
+	];
 
-	let schedule: Schedule[] = weekDaySchedule[new Date().getDay()-1].blocks;
+	let schedule: Schedule[] = weekDaySchedule[new Date().getDay()-1];
 	
 	const [timeRemaining, setTimeRemaining] = React.useState(0);
 
-	const findCurrentBlock = (): Schedule | null => {
+	const findCurrentBlock = (): Schedule => {
 		const now = new Date();
 		for (let i = 0; i < schedule.length; i++) {
 			const startTime = convertToDate(schedule[i].start);
@@ -103,6 +93,9 @@ export default function HomeScreen() {
 			if (startTime < now && now < endTime) {
 				console.log(startTime, endTime, schedule[i])
 				return schedule[i]
+			}
+			if( i === 0 && now < startTime) {
+				return { block: "Before School", start: "No Start Time", end: schedule[i].start, lunch: false };
 			}
 			if( i + 1 < schedule.length && endTime < now && now < convertToDate(schedule[i+1].start)) {
 				return { block: "Transition", start: schedule[i].end, end: schedule[i+1].start, lunch: false };
@@ -114,14 +107,13 @@ export default function HomeScreen() {
 		return { block: "No Class", start: "No Start Time", end: "No End Time", lunch: false };
 	};
 
-	const findCurrentClass = (): Course | null => {
-		const now = new Date();
+	const findCurrentClass = (): Course => {
 		for (let i = 0; i < courses.length; i++) {
-			if (courses[i].block === findCurrentBlock()?.block) {//also at some point add a check for s1 or s2
+			if (courses[i].block === findCurrentBlock().block) {//also at some point add a check for s1 or s2
 				return courses[i];
 			}
 		}
-		return null;
+		return { name: "No Class", teacher: "No Teacher", block: "No Block", lunch: 0, term: 0, roomNumber: "N/A" };
 	}
 
 	function getDifferenceInMinutes(currentDate: Date, endTime: Date) {
@@ -139,16 +131,20 @@ export default function HomeScreen() {
 	const [progress, setProgress] = React.useState(0);
 	useEffect(() => {
 		const interval = setInterval(() => {
-			setNearestStartTime(convertToDate(findCurrentBlock()?.start || "8:20 am"));
-			setNearestEndTime(convertToDate(findCurrentBlock()?.end || "2:55 pm"));
-			if (nearestEndTime && nearestStartTime && nearestStartTime < new Date()) {
-				setTimeRemaining(getDifferenceInMinutes(new Date(), nearestEndTime));
-			} else {//supposed to indicate non-block time such as transition and outside hours but i doubt it works, maybe introduce variable if its transition time or office hours or active block or something like that?
-				if (nearestStartTime) {
-					console.log(getDifferenceInMinutes(new Date(), nearestStartTime))
-					setTimeRemaining(getDifferenceInMinutes(new Date(), nearestStartTime));
-				}
+			let currentBlock = findCurrentBlock()
+			if(currentBlock.block == "Transition" || currentBlock.block == "After School" || currentBlock.block == "No Class") {
+				setTimeRemaining(0);
+				return;
 			}
+
+			const nearestEnd = convertToDate(currentBlock.end || "2:55 pm");
+			setNearestEndTime(nearestEnd);
+			setTimeRemaining(getDifferenceInMinutes(new Date(), nearestEnd));
+
+			if(currentBlock.block == "Before School") {
+				return;
+			}
+			
 			if (nearestStartTime && nearestEndTime) {//still sometimes loss in precision in certain minutes, sometimes 55.00000001 or smth
 				const totalMinutes = getDifferenceInMinutes(nearestStartTime, nearestEndTime);
 				const remainingMinutes = getDifferenceInMinutes(new Date(), nearestEndTime);
