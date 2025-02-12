@@ -38,7 +38,7 @@ export default function Account({ session }: { session: Session }) {
 			const url = URL.createObjectURL(data);
 			setLocalAvatarUrl(url);
 		} catch (error) {
-			console.log("Error downloading image: ", error);
+			console.log("Error downloading image: ", error.message);
 		}
 	}
 

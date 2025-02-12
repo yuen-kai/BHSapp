@@ -3,9 +3,9 @@ import { View, StyleSheet, FlatList, Alert } from 'react-native';
 import { Text, Button, TextInput, useTheme } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js'
 import { supabase } from '../../lib/supabase'
-/*const supabaseUrl = 'https://mvfdwktreukpbcypbrvy.supabase.co'
+const supabaseUrl = 'https://mvfdwktreukpbcypbrvy.supabase.co'
 const supabaseKey = process.env.SUPABASE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey)*/
+const supabase = createClient(supabaseUrl, supabaseKey)
 
 
 type Announcement = {
