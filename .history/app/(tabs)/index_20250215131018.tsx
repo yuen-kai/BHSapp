@@ -82,8 +82,14 @@ export default function HomeScreen() {
 			{ block: "F", start: "12:51 pm", end: "1:53 pm", lunch: false },
 			{ block: "G", start: "2:00 pm", end: "2:55 pm", lunch: false }
 		],
-		[//saturday, had to add so app still works, 
-			{ block: "Saturday", start: "12:00 am", end: "11:59 pm", lunch: false }
+		[//sat temp, had to add so app still works, 
+			//{ block: "Saturday", start: "12:00 am", end: "11:59 pm", lunch: false }
+			{ block: "A", start: "8:20 am", end: "9:15 am", lunch: false },
+			{ block: "B", start: "9:22 am", end: "10:17 am", lunch: false },
+			{ block: "C", start: "10:24 am", end: "11:19 am", lunch: false },
+			{ block: "D", start: "11:26 am", end: "12:51 pm", lunch: true },
+			{ block: "F", start: "12:51 pm", end: "1:53 pm", lunch: false },
+			{ block: "G", start: "2:00 pm", end: "2:55 pm", lunch: false }
 		]
 	];
 
@@ -96,7 +102,7 @@ export default function HomeScreen() {
 		for (let i = 0; i < schedule.length; i++) {
 			const startTime = convertToDate(schedule[i].start);
 			const endTime = convertToDate(schedule[i].end);
-			if (startTime < now && now < endTime) {//
+			if (startTime < now && now < endTime) {
 				return schedule[i]
 			}
 			if( i === 0 && now < startTime) {
@@ -131,23 +137,16 @@ export default function HomeScreen() {
 		const now = new Date();
 		return (60 - now.getSeconds()) - 1;
 	}
-
-	const [useStateCurrentBlock, setUseStateCurrentBlock] = React.useState(findCurrentBlock())
 	const [nearestStartTime, setNearestStartTime] = React.useState<Date>(convertToDate(findCurrentBlock()?.start || "8:20 am"))
-	//theoretically might be good to get rid of neareststarttime and nearestendtime usestates
-	//but progress and time left stop changing even though neareststarttime or nearestendtime not used
 	const [nearestEndTime, setNearestEndTime] = React.useState<Date>(convertToDate(findCurrentBlock()?.end || "2:55 pm"))//placeholder default values
 	const [progress, setProgress] = React.useState(0);
 	useEffect(() => {
 		const interval = setInterval(() => {
 			let currentBlock = findCurrentBlock()
-			setUseStateCurrentBlock(currentBlock)
 			if(currentBlock.block == "Transition" || currentBlock.block == "After School" || currentBlock.block == "No Class") {
 				setTimeRemaining(0);
 				return;
 			}
-			const nearestStart = convertToDate(currentBlock.start || "2:55 pm");
-			setNearestStartTime(nearestStart);
 
 			const nearestEnd = convertToDate(currentBlock.end || "2:55 pm");
 			setNearestEndTime(nearestEnd);
@@ -156,12 +155,12 @@ export default function HomeScreen() {
 			if(currentBlock.block == "Before School") {
 				return;
 			}
-			console.log(nearestStart, nearestEnd)
-			if (nearestStart && nearestEnd) {//still sometimes loss in precision in certain minutes, sometimes 55.00000001 or smth
-				const totalMinutes = getDifferenceInMinutes(nearestStart, nearestEnd);
-				const remainingMinutes = getDifferenceInMinutes(new Date(), nearestEnd);
+			
+			if (nearestStartTime && nearestEndTime) {//still sometimes loss in precision in certain minutes, sometimes 55.00000001 or smth
+				const totalMinutes = getDifferenceInMinutes(nearestStartTime, nearestEndTime);
+				const remainingMinutes = getDifferenceInMinutes(new Date(), nearestEndTime);
 				const progressValue = clamp((totalMinutes - remainingMinutes) / totalMinutes, 0, 1);
-				setProgress(Math.round(progressValue * 100) / 100 || 0);//based on minutes not seconds so at minute = 0, progress is full
+				setProgress(Math.round(progressValue * 100) / 100 || 0);
 			}
 		}, 1000);
 		return () => clearInterval(interval);
@@ -186,7 +185,7 @@ export default function HomeScreen() {
 						{findCurrentClass()?.teacher || 'No Teacher'} • Room {findCurrentClass()?.roomNumber || 'N/A'}
 					</Text>
 					<Text style={styles.courseInfoSubTitle}>
-						{findCurrentBlock() ? useStateCurrentBlock.block : 'No Block'} Block
+						{findCurrentBlock() ? findCurrentBlock()?.block : 'No Block'} Block
 					</Text>
 				</Card.Content>
 			</Card>

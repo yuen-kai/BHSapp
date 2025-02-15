@@ -11,6 +11,11 @@ AppState.addEventListener('change', (state) => {
     }
 })
 
+function validateEmail(email: string) {
+    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return re.test(email);
+}
+
 export default function Auth() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -35,23 +40,12 @@ export default function Auth() {
             email,
             password,
         })
+        console.log(validateEmail('26ching@brooklinek12.org'))
         if (error) {
-            console.error('Signup Error:', error);
-            if (error.code === 'auth/invalid-email') {
-              Alert.alert('Error', 'Invalid email format');
-            } else if (error.code === 'auth/email-already-in-use') {
-              Alert.alert('Error', 'Email is already in use');
-            } else {
-              Alert.alert('Error', error.message);
-            }
-          } else {
-            console.log('Signup Success:', session);
-            if (session) {
-              console.log('Session:', session);
-            } else {
-              Alert.alert('Check your inbox for email verification!');
-            }
-          }
+            Alert.alert('Error', error.message)     // Disconsole.error('Sign-up error:', error)  // Log the error for better visibilityplay the error message
+        } else if (!session) {
+            Alert.alert('Check your inbox for email verification!')
+        }
         setLoading(false)
     }
 

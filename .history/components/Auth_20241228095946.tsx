@@ -35,23 +35,8 @@ export default function Auth() {
             email,
             password,
         })
-        if (error) {
-            console.error('Signup Error:', error);
-            if (error.code === 'auth/invalid-email') {
-              Alert.alert('Error', 'Invalid email format');
-            } else if (error.code === 'auth/email-already-in-use') {
-              Alert.alert('Error', 'Email is already in use');
-            } else {
-              Alert.alert('Error', error.message);
-            }
-          } else {
-            console.log('Signup Success:', session);
-            if (session) {
-              console.log('Session:', session);
-            } else {
-              Alert.alert('Check your inbox for email verification!');
-            }
-          }
+        if (error) Alert.alert(error.message)
+        if (!session) Alert.alert('Please check your inbox for email verification!')
         setLoading(false)
     }
 

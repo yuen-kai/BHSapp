@@ -134,8 +134,6 @@ export default function HomeScreen() {
 
 	const [useStateCurrentBlock, setUseStateCurrentBlock] = React.useState(findCurrentBlock())
 	const [nearestStartTime, setNearestStartTime] = React.useState<Date>(convertToDate(findCurrentBlock()?.start || "8:20 am"))
-	//theoretically might be good to get rid of neareststarttime and nearestendtime usestates
-	//but progress and time left stop changing even though neareststarttime or nearestendtime not used
 	const [nearestEndTime, setNearestEndTime] = React.useState<Date>(convertToDate(findCurrentBlock()?.end || "2:55 pm"))//placeholder default values
 	const [progress, setProgress] = React.useState(0);
 	useEffect(() => {
@@ -156,12 +154,12 @@ export default function HomeScreen() {
 			if(currentBlock.block == "Before School") {
 				return;
 			}
-			console.log(nearestStart, nearestEnd)
-			if (nearestStart && nearestEnd) {//still sometimes loss in precision in certain minutes, sometimes 55.00000001 or smth
-				const totalMinutes = getDifferenceInMinutes(nearestStart, nearestEnd);
-				const remainingMinutes = getDifferenceInMinutes(new Date(), nearestEnd);
+			
+			if (nearestStartTime && nearestEndTime) {//still sometimes loss in precision in certain minutes, sometimes 55.00000001 or smth
+				const totalMinutes = getDifferenceInMinutes(nearestStartTime, nearestEndTime);
+				const remainingMinutes = getDifferenceInMinutes(new Date(), nearestEndTime);
 				const progressValue = clamp((totalMinutes - remainingMinutes) / totalMinutes, 0, 1);
-				setProgress(Math.round(progressValue * 100) / 100 || 0);//based on minutes not seconds so at minute = 0, progress is full
+				setProgress(Math.round(progressValue * 100) / 100 || 0);
 			}
 		}, 1000);
 		return () => clearInterval(interval);

@@ -55,6 +55,30 @@ export default function Auth() {
         setLoading(false)
     }
 
+    const handleSignUp = async () => {
+        setLoading(true); // Set loading to true while making the request
+    
+        try {
+          const response = await fetch('https://mvfdwktreukpbcypbrvy.supabase.co/auth/v1/signup', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: "26ching@brooklinek12.org",
+              password: "bhsiscool",
+            }),
+          });
+          const data = await response.json();
+          console.log(data)
+        } catch (error) {
+            console.error('Error during sign up:', error);
+            Alert.alert('Error', 'Something went wrong. Please try again.');
+          } finally {
+            setLoading(false); // Set loading to false once the request is completed
+          }
+    }
+
     return (
         <View style={styles.container}>
             <View style={[styles.verticallySpaced, styles.mt20]}>

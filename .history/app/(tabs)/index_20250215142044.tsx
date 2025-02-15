@@ -84,7 +84,6 @@ export default function HomeScreen() {
 		],
 		[//saturday, had to add so app still works, 
 			{ block: "Saturday", start: "12:00 am", end: "11:59 pm", lunch: false }
-		]
 	];
 
 	let schedule: Schedule[] = weekDaySchedule[new Date().getDay()];

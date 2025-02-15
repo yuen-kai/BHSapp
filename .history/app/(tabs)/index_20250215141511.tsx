@@ -83,7 +83,13 @@ export default function HomeScreen() {
 			{ block: "G", start: "2:00 pm", end: "2:55 pm", lunch: false }
 		],
 		[//saturday, had to add so app still works, 
-			{ block: "Saturday", start: "12:00 am", end: "11:59 pm", lunch: false }
+			//{ block: "Saturday", start: "12:00 am", end: "11:59 pm", lunch: false }
+			{ block: "A", start: "8:20 am", end: "9:15 am", lunch: false },
+			{ block: "B", start: "9:22 am", end: "10:17 am", lunch: false },
+			{ block: "C", start: "10:24 am", end: "11:19 am", lunch: false },
+			{ block: "D", start: "11:26 am", end: "12:51 pm", lunch: true },
+			{ block: "F", start: "12:51 pm", end: "1:53 pm", lunch: false },
+			{ block: "G", start: "2:10 pm", end: "2:20 pm", lunch: false }
 		]
 	];
 
@@ -134,8 +140,6 @@ export default function HomeScreen() {
 
 	const [useStateCurrentBlock, setUseStateCurrentBlock] = React.useState(findCurrentBlock())
 	const [nearestStartTime, setNearestStartTime] = React.useState<Date>(convertToDate(findCurrentBlock()?.start || "8:20 am"))
-	//theoretically might be good to get rid of neareststarttime and nearestendtime usestates
-	//but progress and time left stop changing even though neareststarttime or nearestendtime not used
 	const [nearestEndTime, setNearestEndTime] = React.useState<Date>(convertToDate(findCurrentBlock()?.end || "2:55 pm"))//placeholder default values
 	const [progress, setProgress] = React.useState(0);
 	useEffect(() => {
@@ -147,10 +151,7 @@ export default function HomeScreen() {
 				return;
 			}
 			const nearestStart = convertToDate(currentBlock.start || "2:55 pm");
-			setNearestStartTime(nearestStart);
-
 			const nearestEnd = convertToDate(currentBlock.end || "2:55 pm");
-			setNearestEndTime(nearestEnd);
 			setTimeRemaining(getDifferenceInMinutes(new Date(), nearestEnd));
 
 			if(currentBlock.block == "Before School") {
@@ -161,7 +162,7 @@ export default function HomeScreen() {
 				const totalMinutes = getDifferenceInMinutes(nearestStart, nearestEnd);
 				const remainingMinutes = getDifferenceInMinutes(new Date(), nearestEnd);
 				const progressValue = clamp((totalMinutes - remainingMinutes) / totalMinutes, 0, 1);
-				setProgress(Math.round(progressValue * 100) / 100 || 0);//based on minutes not seconds so at minute = 0, progress is full
+				setProgress(Math.round(progressValue * 100) / 100 || 0);
 			}
 		}, 1000);
 		return () => clearInterval(interval);

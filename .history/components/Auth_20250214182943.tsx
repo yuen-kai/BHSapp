@@ -55,6 +55,31 @@ export default function Auth() {
         setLoading(false)
     }
 
+    const handleSignUp = async () => {
+        setLoading(true); // Set loading to true while making the request
+    
+        try {
+          const response = await fetch('https://mvfdwktreukpbcypbrvy.supabase.co/auth/v1/signup', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12ZmR3a3RyZXVrcGJjeXBicnZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzUzMjIxODksImV4cCI6MjA1MDg5ODE4OX0.XMlutI6XFlPkbB6Qn3j85putZdpmRM_eWK6vxhZtblM'
+            },
+            body: JSON.stringify({
+              email: "26ching@brooklinek12.org",
+              password: "bhsiscool",
+            }),
+          });
+          const data = await response.json();
+          console.log(data)
+        } catch (error) {
+            console.error('Error during sign up:', error);
+            Alert.alert('Error', 'Something went wrong. Please try again.');
+          } finally {
+            setLoading(false); // Set loading to false once the request is completed
+          }
+    }
+
     return (
         <View style={styles.container}>
             <View style={[styles.verticallySpaced, styles.mt20]}>
@@ -82,7 +107,7 @@ export default function Auth() {
                 </Button>
             </View>
             <View style={styles.verticallySpaced}>
-                <Button mode="contained" onPress={signUpWithEmail} loading={loading}>
+                <Button mode="contained" onPress={handleSignUp} loading={loading}>
                     Sign up
                 </Button>
             </View>
