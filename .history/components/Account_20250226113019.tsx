@@ -127,6 +127,7 @@ export default function Account({ session }: { session: Session }) {
 			if (uploadError) {
 				throw uploadError;
 			}
+
 			const updates = {
 				id: session?.user.id,
 				full_name: name,
@@ -134,6 +135,7 @@ export default function Account({ session }: { session: Session }) {
 				avatar_url: filePath,
 				updated_at: new Date(),
 			};
+
 			const { error } = await supabase.from("profiles").upsert(updates);
 
 			if (error) {
