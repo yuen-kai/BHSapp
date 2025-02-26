@@ -134,6 +134,7 @@ export default function Account({ session }: { session: Session }) {
 				avatar_url: filePath,
 				updated_at: new Date(),
 			};
+			console.log(updates)
 			const { error } = await supabase.from("profiles").upsert(updates);
 
 			if (error) {

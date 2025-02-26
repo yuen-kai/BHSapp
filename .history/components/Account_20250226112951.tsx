@@ -53,7 +53,7 @@ export default function Account({ session }: { session: Session }) {
 
 			const { data, error, status } = await supabase
 				.from("profiles")
-				.select(`full_name, bio, avatar_url`)
+				.select(`name, bio, avatar_url`)
 				.eq("id", session?.user.id)
 				.single();
 			if (error && status !== 406) {
@@ -61,7 +61,7 @@ export default function Account({ session }: { session: Session }) {
 			}
 
 			if (data) {
-				setName(data.full_name);
+				setName(data.name);
 				setBio(data.bio);
 				setStoredAvatarUrl(data.avatar_url);
 			}
@@ -127,6 +127,7 @@ export default function Account({ session }: { session: Session }) {
 			if (uploadError) {
 				throw uploadError;
 			}
+
 			const updates = {
 				id: session?.user.id,
 				full_name: name,
@@ -134,6 +135,7 @@ export default function Account({ session }: { session: Session }) {
 				avatar_url: filePath,
 				updated_at: new Date(),
 			};
+
 			const { error } = await supabase.from("profiles").upsert(updates);
 
 			if (error) {

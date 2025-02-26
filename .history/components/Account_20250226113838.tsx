@@ -99,11 +99,11 @@ export default function Account({ session }: { session: Session }) {
 
 
 	async function updateProfile({
-		name,
+		full_name,
 		bio,
 		imagePath,
 	}: {
-		name: string;
+		full_name: string;
 		bio: string;
 		imagePath: string;
 	}) {
@@ -202,7 +202,7 @@ export default function Account({ session }: { session: Session }) {
 				<View style={[styles.verticallySpaced, styles.mt20]}>
 					<Button
 						onPress={() =>
-							updateProfile({ name: name, bio: bio, imagePath: localAvatarUrl })
+							updateProfile({ full_name: name, bio: bio, imagePath: localAvatarUrl })
 						}
 						disabled={loading}
 					>
