@@ -142,7 +142,7 @@ export default function HomeScreen() {
 		const interval = setInterval(() => {
 			let currentBlock = findCurrentBlock()
 			setUseStateCurrentBlock(currentBlock)
-			if(currentBlock.block == "Transition" || currentBlock.block == "After School" || currentBlock.block == "No Class") {
+			if(currentBlock.block == "After School" || currentBlock.block == "No Class") {
 				setTimeRemaining(0);
 				return;
 			}
@@ -158,9 +158,9 @@ export default function HomeScreen() {
 			}
 			if (nearestStart && nearestEnd) {//still sometimes loss in precision in certain minutes, sometimes 55.00000001 or smth
 				const totalMinutes = getDifferenceInMinutes(nearestStart, nearestEnd);
-				const remainingMinutes = getDifferenceInMinutes(new Date(), nearestEnd);
-				const progressValue = clamp((totalMinutes - remainingMinutes) / totalMinutes, 0, 1);
-				setProgress(Math.round(progressValue * 100) / 100 || 0);//based on minutes not seconds so at minute = 0, progress is full
+				const minutesPast = getDifferenceInMinutes(nearestStart, new Date());
+				const progressValue = clamp((minutesPast) / totalMinutes, 0, 1);
+				setProgress(progressValue);
 			}
 		}, 1000);
 		return () => clearInterval(interval);
