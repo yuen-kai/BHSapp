@@ -28,21 +28,6 @@ export default function Account({ session }: { session: Session }) {
 		if (storedAvatarUrl) downloadImage(storedAvatarUrl);
 	}, [storedAvatarUrl]);
 
-	async function getSignedUrl(path: string) {
-		try {
-		  const { data, error: signedUrlError } = await supabase.storage
-			.from('avatars')
-			.createSignedUrl(path, 60); // 60 seconds expiry
-	  
-		  if (signedUrlError) {
-			throw signedUrlError;
-		  }
-
-		  return data?.signedUrl; // Access signed URL from data
-		} catch (error) {
-		  console.error('Error fetching signed URL:', error);
-		}
-	  }
 	async function downloadImage(path: string) {
 		try {
 			const { data, error } = await supabase.storage
@@ -51,9 +36,17 @@ export default function Account({ session }: { session: Session }) {
 			if (error) {
 				throw error;
 			}
-			const signedUrl = await getSignedUrl(path)
-	
-			setLocalAvatarUrl(signedUrl || '');
+			const { publicURL, error: signedUrlError } = supabase.storage.from('avatars').getSignedUrl(path, 60); // 60 seconds expiry
+
+			if (signedUrlError) {
+  				console.error("Error generating signed URL: ", signedUrlError);
+  				return;
+			}
+
+			const response = await fetch(publicURL);
+			const blob = await response.blob();
+			const url = URL.createObjectURL(blob);
+			setLocalAvatarUrl(url);
 		} catch (error) {
 			console.log("Error downloading image: ", error);
 		}
@@ -150,8 +143,8 @@ export default function Account({ session }: { session: Session }) {
 			// Join the array to form the cleaned base64 string
 			let cleanedBase64 = cleanedBase64Array.join('');
 	
-			const { data, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, decode(cleanedBase64), {
-				contentType: "image/"+fileExt,
+			const { data, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, cleanedBase64, {
+				contentType: "image/jpeg",
 				//maybe upsert: 'true' for overriding?
 			  })
 			  console.log("before setstoredavatarurl, uploaded to supabase")

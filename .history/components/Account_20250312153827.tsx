@@ -28,21 +28,6 @@ export default function Account({ session }: { session: Session }) {
 		if (storedAvatarUrl) downloadImage(storedAvatarUrl);
 	}, [storedAvatarUrl]);
 
-	async function getSignedUrl(path: string) {
-		try {
-		  const { data, error: signedUrlError } = await supabase.storage
-			.from('avatars')
-			.createSignedUrl(path, 60); // 60 seconds expiry
-	  
-		  if (signedUrlError) {
-			throw signedUrlError;
-		  }
-
-		  return data?.signedUrl; // Access signed URL from data
-		} catch (error) {
-		  console.error('Error fetching signed URL:', error);
-		}
-	  }
 	async function downloadImage(path: string) {
 		try {
 			const { data, error } = await supabase.storage
@@ -51,9 +36,8 @@ export default function Account({ session }: { session: Session }) {
 			if (error) {
 				throw error;
 			}
-			const signedUrl = await getSignedUrl(path)
-	
-			setLocalAvatarUrl(signedUrl || '');
+			const url = URL.createObjectURL(data);
+			setLocalAvatarUrl(url);
 		} catch (error) {
 			console.log("Error downloading image: ", error);
 		}
@@ -133,34 +117,19 @@ export default function Account({ session }: { session: Session }) {
 			const fileExt = imagePath.split('.').pop();
 			const filePath = `${Math.random()}.${fileExt}`;
 			const response = await fetch(imagePath);
-			const base64Image = await response.text()
-		
-			let base64Data = base64Image.replace(/^data:image\/\w+;base64,/, "");
+			const blob = await response.blob();
 
-			// Initialize an array to collect valid base64 characters
-			let cleanedBase64Array = [];
-
-			// Loop through the base64 data and collect valid characters
-			for (let i = 0; i < base64Data.length; i++) {
-    			const char = base64Data[i];
-    			if (/^[A-Za-z0-9+/=]$/.test(char)) {
-        			cleanedBase64Array.push(char); // Push valid characters into the array
-    			}
-			}
-			// Join the array to form the cleaned base64 string
-			let cleanedBase64 = cleanedBase64Array.join('');
-	
-			const { data, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, decode(cleanedBase64), {
-				contentType: "image/"+fileExt,
-				//maybe upsert: 'true' for overriding?
-			  })
-			  console.log("before setstoredavatarurl, uploaded to supabase")
-			  setStoredAvatarUrl(filePath);
+			console.log(blob, blob.type)
+			console.log(decode(imagePath))
+			const { data, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, decode(imagePath), {
+				contentType: blob.type,
+			  });//this causing error
+			  console.log(data)
+			//setStoredAvatarUrl(filePath);
 
 			if (uploadError) {
 				throw uploadError;
 			}
-
 			const updates = {
 				id: session?.user.id,
 				full_name: name,
