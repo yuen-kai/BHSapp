@@ -12,7 +12,6 @@ import {
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { Text, TextInput, Button, Avatar, useTheme } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
-import { decode } from 'base64-arraybuffer'
 
 export default function Account({ session }: { session: Session }) {
 	const { colors } = useTheme();
@@ -114,22 +113,53 @@ export default function Account({ session }: { session: Session }) {
 			if (imagePath == "") throw new Error('You must select an image to upload.')
 
 			// Upload the image to the server
-			const fileExt = imagePath.split('.').pop();
+			/*const fileExt = imagePath.split('.').pop();
 			const filePath = `${Math.random()}.${fileExt}`;
 			const response = await fetch(imagePath);
 			const blob = await response.blob();
-
-			console.log(blob, blob.type)
-			console.log(decode(imagePath))
-			const { data, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, decode(imagePath), {
+			console.log(blob)
+			const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, blob, {
 				contentType: blob.type,
-			  });//this causing error
-			  console.log(data)
+			  });
+
 			setStoredAvatarUrl(filePath);
 
 			if (uploadError) {
 				throw uploadError;
+			}*/
+
+			const fileExt = imagePath.split('.').pop() || '';
+			const validExtensions = ['jpg', 'jpeg', 'png', 'gif'];  // Extend this list as needed
+
+// Check if the file extension is valid
+			if (!validExtensions.includes(fileExt.toLowerCase())) {
+  				console.error("Invalid file type.");
+  				return;
 			}
+
+const filePath = `${Math.random()}.${fileExt}`;
+
+  // Fetch the image file from the URL
+  const response = await fetch(imagePath);
+
+  // Check if the fetch request was successful
+  if (!response.ok) {
+    throw new Error(`Failed to fetch image. Status: ${response.status}`);
+  }
+
+  const blob = await response.blob();
+
+  // Upload the image to Supabase storage
+  const { data, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, blob, {
+    contentType: blob.type,
+  });
+
+  if (uploadError) {
+    console.error('Upload failed:', uploadError.message);
+    return;
+  }
+
+  console.log('Upload successful:', data);
 			const updates = {
 				id: session?.user.id,
 				full_name: name,

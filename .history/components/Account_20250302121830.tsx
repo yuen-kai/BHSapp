@@ -12,7 +12,6 @@ import {
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { Text, TextInput, Button, Avatar, useTheme } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
-import { decode } from 'base64-arraybuffer'
 
 export default function Account({ session }: { session: Session }) {
 	const { colors } = useTheme();
@@ -119,9 +118,9 @@ export default function Account({ session }: { session: Session }) {
 			const response = await fetch(imagePath);
 			const blob = await response.blob();
 
-			console.log(blob, blob.type)
-			console.log(decode(imagePath))
-			const { data, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, decode(imagePath), {
+			console.log(blob)
+			console.log(filePath, response)
+			const { data, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, blob, {
 				contentType: blob.type,
 			  });//this causing error
 			  console.log(data)

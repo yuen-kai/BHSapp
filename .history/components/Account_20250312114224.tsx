@@ -120,7 +120,7 @@ export default function Account({ session }: { session: Session }) {
 			const blob = await response.blob();
 
 			console.log(blob, blob.type)
-			console.log(decode(imagePath))
+			
 			const { data, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, decode(imagePath), {
 				contentType: blob.type,
 			  });//this causing error
