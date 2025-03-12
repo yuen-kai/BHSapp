@@ -159,7 +159,7 @@ export default function HomeScreen() {
 			if (nearestStart && nearestEnd) {//still sometimes loss in precision in certain minutes, sometimes 55.00000001 or smth
 				const totalMinutes = getDifferenceInMinutes(nearestStart, nearestEnd);
 				const minutesPast = getDifferenceInMinutes(nearestStart, new Date());
-				const progressValue = clamp((minutesPast) / totalMinutes, 0, 1);
+				const progressValue = parseFloat(clamp((minutesPast) / totalMinutes, 0, 1).toFixed(2));
 				setProgress(progressValue);
 			}
 		}, 1000);
