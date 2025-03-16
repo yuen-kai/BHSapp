@@ -12,6 +12,7 @@ import {
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { Text, TextInput, Button, Avatar, useTheme } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
+import { decode } from 'base64-arraybuffer'
 
 export default function Account({ session }: { session: Session }) {
 	const { colors } = useTheme();
@@ -27,6 +28,21 @@ export default function Account({ session }: { session: Session }) {
 		if (storedAvatarUrl) downloadImage(storedAvatarUrl);
 	}, [storedAvatarUrl]);
 
+	async function getSignedUrl(path: string) {
+		try {
+		  const { data, error: signedUrlError } = await supabase.storage
+			.from('avatars')
+			.createSignedUrl(path, 60); // 60 seconds expiry
+	  
+		  if (signedUrlError) {
+			throw signedUrlError;
+		  }
+
+		  return data?.signedUrl; // Access signed URL from data
+		} catch (error) {
+		  console.error('Error fetching signed URL:', error);
+		}
+	  }
 	async function downloadImage(path: string) {
 		try {
 			const { data, error } = await supabase.storage
@@ -35,10 +51,10 @@ export default function Account({ session }: { session: Session }) {
 			if (error) {
 				throw error;
 			}
-			const url = URL.createObjectURL(data);
-			setLocalAvatarUrl(url);
+			const signedUrl = await getSignedUrl(path)
+			setLocalAvatarUrl(signedUrl || '');
 		} catch (error) {
-			console.log("Error downloading image: ", error.message);
+			console.log("Error downloading image: ", error);
 		}
 	}
 
@@ -53,15 +69,14 @@ export default function Account({ session }: { session: Session }) {
 
 			const { data, error, status } = await supabase
 				.from("profiles")
-				.select(`name, bio, avatar_url`)
+				.select(`full_name, bio, avatar_url`)
 				.eq("id", session?.user.id)
 				.single();
 			if (error && status !== 406) {
 				throw error;
 			}
-
 			if (data) {
-				setName(data.name);
+				setName(data.full_name);
 				setBio(data.bio);
 				setStoredAvatarUrl(data.avatar_url);
 			}
@@ -96,6 +111,23 @@ export default function Account({ session }: { session: Session }) {
 			setAvatarImage(result.assets[0])
 		}
 	};
+	const uriToBase64 = async (uri: any) => {
+		const response = await fetch(uri);
+		const imageBlob = await response.blob();
+		const reader = new FileReader();
+	  
+		return new Promise<string>((resolve, reject) => {
+		  reader.onloadend = () => {
+			if (reader.result && typeof reader.result === "string") {
+			  resolve(reader.result.split(',')[1]); // Extract Base64 string from data URL
+			} else {
+			  reject(new Error("Failed to read file or result is not a string"));
+			}
+		  };
+		  reader.onerror = reject;
+		  reader.readAsDataURL(imageBlob); // Convert image blob to Base64 string
+		});
+	  };
 
 
 	async function updateProfile({
@@ -110,34 +142,52 @@ export default function Account({ session }: { session: Session }) {
 		try {
 			setLoading(true);
 			if (!session?.user) throw new Error("No user on the session!");
+			imagePath = localAvatarUrl
+			console.log(imagePath)
 			if (imagePath == "") throw new Error('You must select an image to upload.')
 
 			// Upload the image to the server
 			const fileExt = imagePath.split('.').pop();
 			const filePath = `${Math.random()}.${fileExt}`;
 			const response = await fetch(imagePath);
-			const blob = await response.blob();
-			console.log(blob)
-			const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, blob, {
-				contentType: blob.type,
-			  });
+			
+			/*const base64Image = await response.text()
+		
+			let base64Data = base64Image.replace(/^data:image\/\w+;base64,/, "");
 
-			// setStoredAvatarUrl(filePath);
+			// Initialize an array to collect valid base64 characters
+			let cleanedBase64Array = [];
+
+			// Loop through the base64 data and collect valid characters
+			for (let i = 0; i < base64Data.length; i++) {
+    			const char = base64Data[i];
+    			if (/^[A-Za-z0-9+/=]$/.test(char)) {
+        			cleanedBase64Array.push(char); // Push valid characters into the array
+    			}
+			}
+			// Join the array to form the cleaned base64 string
+			let cleanedBase64 = cleanedBase64Array.join('');*/
+			const base64 = await uriToBase64(imagePath);
+			console.log(base64)
+			const { data: uploadData, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, base64, {
+				contentType: "image/"+fileExt,
+				//maybe upsert: 'true' for overriding?
+			  })
+			  setStoredAvatarUrl(filePath);
 
 			if (uploadError) {
 				throw uploadError;
 			}
-
 			const updates = {
 				id: session?.user.id,
-				name,
-				bio,
-				avatar_url: filePath,
 				updated_at: new Date(),
+				avatar_url: filePath,
+				bio: bio,
+				full_name: name,
 			};
-
-			const { error } = await supabase.from("profiles").upsert(updates);
-
+			//prints out updates fine
+			const { data, error } = await supabase.from("profiles").upsert(updates);
+			
 			if (error) {
 				throw error;
 			}

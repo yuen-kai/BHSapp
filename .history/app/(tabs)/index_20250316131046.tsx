@@ -160,7 +160,7 @@ export default function HomeScreen() {
 				const totalMinutes = getDifferenceInMinutes(nearestStart, nearestEnd);
 				const minutesPast = getDifferenceInMinutes(nearestStart, new Date());
 				const progressValue = parseFloat(clamp((minutesPast) / totalMinutes, 0, 1).toFixed(2));
-				setProgress(9);
+				setProgress(progressValue);
 			}
 		}, 1000);
 		return () => clearInterval(interval);

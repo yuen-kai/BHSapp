@@ -143,14 +143,16 @@ export default function Account({ session }: { session: Session }) {
 			setLoading(true);
 			if (!session?.user) throw new Error("No user on the session!");
 			console.log(imagePath)
+			imagePath = localAvatarUrl
+			console.log(imagePath)
 			if (imagePath == "") throw new Error('You must select an image to upload.')
 
 			// Upload the image to the server
 			const fileExt = imagePath.split('.').pop();
 			const filePath = `${Math.random()}.${fileExt}`;
-			/*const response = await fetch(imagePath);
+			const response = await fetch(imagePath);
 			
-			const base64Image = await response.text()
+			/*const base64Image = await response.text()
 		
 			let base64Data = base64Image.replace(/^data:image\/\w+;base64,/, "");
 
