@@ -167,7 +167,7 @@ export default function Account({ session }: { session: Session }) {
 			// Join the array to form the cleaned base64 string
 			let cleanedBase64 = cleanedBase64Array.join('');*/
 			const base64 = await uriToBase64(imagePath);
-			
+			console.log(base64)
 			const { data: uploadData, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, base64, {
 				contentType: "image/"+fileExt,
 				//maybe upsert: 'true' for overriding?

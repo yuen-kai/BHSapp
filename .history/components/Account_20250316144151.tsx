@@ -148,9 +148,9 @@ export default function Account({ session }: { session: Session }) {
 			// Upload the image to the server
 			const fileExt = imagePath.split('.').pop();
 			const filePath = `${Math.random()}.${fileExt}`;
-			/*const response = await fetch(imagePath);
+			const response = await fetch(imagePath);
 			
-			const base64Image = await response.text()
+			/*const base64Image = await response.text()
 		
 			let base64Data = base64Image.replace(/^data:image\/\w+;base64,/, "");
 

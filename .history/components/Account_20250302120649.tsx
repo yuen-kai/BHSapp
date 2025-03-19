@@ -38,7 +38,7 @@ export default function Account({ session }: { session: Session }) {
 			const url = URL.createObjectURL(data);
 			setLocalAvatarUrl(url);
 		} catch (error) {
-			console.log("Error downloading image: ", error.message);
+			console.log("Error downloading image: ", error);
 		}
 	}
 
@@ -53,7 +53,7 @@ export default function Account({ session }: { session: Session }) {
 
 			const { data, error, status } = await supabase
 				.from("profiles")
-				.select(`name, bio, avatar_url`)
+				.select(`full_name, bio, avatar_url`)
 				.eq("id", session?.user.id)
 				.single();
 			if (error && status !== 406) {
@@ -61,7 +61,7 @@ export default function Account({ session }: { session: Session }) {
 			}
 
 			if (data) {
-				setName(data.name);
+				setName(data.full_name);
 				setBio(data.bio);
 				setStoredAvatarUrl(data.avatar_url);
 			}
@@ -118,24 +118,22 @@ export default function Account({ session }: { session: Session }) {
 			const response = await fetch(imagePath);
 			const blob = await response.blob();
 			console.log(blob)
+
 			const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, blob, {
 				contentType: blob.type,
-			  });
-
-			// setStoredAvatarUrl(filePath);
+			  });//this causing error
+			setStoredAvatarUrl(filePath);
 
 			if (uploadError) {
 				throw uploadError;
 			}
-
 			const updates = {
 				id: session?.user.id,
-				name,
+				full_name: name,
 				bio,
 				avatar_url: filePath,
 				updated_at: new Date(),
 			};
-
 			const { error } = await supabase.from("profiles").upsert(updates);
 
 			if (error) {

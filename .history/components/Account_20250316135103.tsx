@@ -52,6 +52,7 @@ export default function Account({ session }: { session: Session }) {
 				throw error;
 			}
 			const signedUrl = await getSignedUrl(path)
+	
 			setLocalAvatarUrl(signedUrl || '');
 		} catch (error) {
 			console.log("Error downloading image: ", error);
@@ -111,23 +112,6 @@ export default function Account({ session }: { session: Session }) {
 			setAvatarImage(result.assets[0])
 		}
 	};
-	const uriToBase64 = async (uri: any) => {
-		const response = await fetch(uri);
-		const imageBlob = await response.blob();
-		const reader = new FileReader();
-	  
-		return new Promise<string>((resolve, reject) => {
-		  reader.onloadend = () => {
-			if (reader.result && typeof reader.result === "string") {
-			  resolve(reader.result.split(',')[1]); // Extract Base64 string from data URL
-			} else {
-			  reject(new Error("Failed to read file or result is not a string"));
-			}
-		  };
-		  reader.onerror = reject;
-		  reader.readAsDataURL(imageBlob); // Convert image blob to Base64 string
-		});
-	  };
 
 
 	async function updateProfile({
@@ -142,14 +126,12 @@ export default function Account({ session }: { session: Session }) {
 		try {
 			setLoading(true);
 			if (!session?.user) throw new Error("No user on the session!");
-			console.log(imagePath)
 			if (imagePath == "") throw new Error('You must select an image to upload.')
 
 			// Upload the image to the server
 			const fileExt = imagePath.split('.').pop();
 			const filePath = `${Math.random()}.${fileExt}`;
-			/*const response = await fetch(imagePath);
-			
+			const response = await fetch(imagePath);
 			const base64Image = await response.text()
 		
 			let base64Data = base64Image.replace(/^data:image\/\w+;base64,/, "");
@@ -165,10 +147,9 @@ export default function Account({ session }: { session: Session }) {
     			}
 			}
 			// Join the array to form the cleaned base64 string
-			let cleanedBase64 = cleanedBase64Array.join('');*/
-			const base64 = await uriToBase64(imagePath);
-			
-			const { data: uploadData, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, base64, {
+			let cleanedBase64 = cleanedBase64Array.join('');
+	
+			const { data: uploadData, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, decode(cleanedBase64), {
 				contentType: "image/"+fileExt,
 				//maybe upsert: 'true' for overriding?
 			  })
@@ -185,9 +166,10 @@ export default function Account({ session }: { session: Session }) {
 				full_name: name,
 			};
 			//prints out updates fine
-			const { data, error } = await supabase.from("profiles").upsert(updates);
-			
+			const { data, error } = await supabase.from("profiles").upsert(updates, { onConflict: 'id' }).select();
+			console.log(data)
 			if (error) {
+				console.log(error)
 				throw error;
 			}
 		} catch (error) {

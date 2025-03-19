@@ -142,15 +142,16 @@ export default function Account({ session }: { session: Session }) {
 		try {
 			setLoading(true);
 			if (!session?.user) throw new Error("No user on the session!");
+			imagePath = localAvatarUrl
 			console.log(imagePath)
 			if (imagePath == "") throw new Error('You must select an image to upload.')
 
 			// Upload the image to the server
 			const fileExt = imagePath.split('.').pop();
 			const filePath = `${Math.random()}.${fileExt}`;
-			/*const response = await fetch(imagePath);
+			const response = await fetch(imagePath);
 			
-			const base64Image = await response.text()
+			/*const base64Image = await response.text()
 		
 			let base64Data = base64Image.replace(/^data:image\/\w+;base64,/, "");
 
@@ -166,6 +167,7 @@ export default function Account({ session }: { session: Session }) {
 			}
 			// Join the array to form the cleaned base64 string
 			let cleanedBase64 = cleanedBase64Array.join('');*/
+			console.log(imagePath)
 			const base64 = await uriToBase64(imagePath);
 			
 			const { data: uploadData, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, base64, {
