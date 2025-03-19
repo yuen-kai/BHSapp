@@ -3,6 +3,7 @@ import { View, StyleSheet, FlatList, Alert } from 'react-native';
 import { Text, Button, TextInput, useTheme } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js'
 import { supabase } from '../../lib/supabase'
+import { Session } from "@supabase/supabase-js";
 /*const supabaseUrl = 'https://mvfdwktreukpbcypbrvy.supabase.co'
 const supabaseKey = process.env.SUPABASE_KEY
 const supabase = createClient(supabaseUrl, supabaseKey)*/
@@ -20,12 +21,25 @@ export default function Announcements() {
     const [newTitle, setNewTitle] = useState('');
     const [newContent, setNewContent] = useState('');
     const [loading, setLoading] = useState(false);
-
+    //
+    const [session, setSession] = useState<Session | null>(null)
+    
+      useEffect(() => {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+          setSession(session)
+        })
+    
+        supabase.auth.onAuthStateChange((_event, session) => {
+          setSession(session)
+        })
+      }, [])
+    //
     useEffect(() => {
         const channel = supabase
             .channel("announcements")
             .on("postgres_changes", { event: "INSERT", schema: "public", table: "announcements" }, (payload) => {
-                setAnnouncements((prev) => [payload.new, ...prev]);
+                const newAnnouncement = payload.new as Announcement;
+                setAnnouncements((prev) => [newAnnouncement, ...prev]);
             })
             .subscribe();
 

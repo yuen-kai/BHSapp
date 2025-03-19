@@ -25,7 +25,9 @@ export default function Account({ session }: { session: Session }) {
 	const [avatarImage, setAvatarImage] = useState<ImagePicker.ImagePickerAsset | null>(null);
 
 	useEffect(() => {
-		if (storedAvatarUrl) downloadImage(storedAvatarUrl);
+		if (storedAvatarUrl){
+			downloadImage(storedAvatarUrl);
+		}
 	}, [storedAvatarUrl]);
 
 	async function getSignedUrl(path: string) {
@@ -142,33 +144,15 @@ export default function Account({ session }: { session: Session }) {
 		try {
 			setLoading(true);
 			if (!session?.user) throw new Error("No user on the session!");
-			console.log(imagePath)
 			if (imagePath == "") throw new Error('You must select an image to upload.')
 
 			// Upload the image to the server
 			const fileExt = imagePath.split('.').pop();
-			const filePath = `${Math.random()}.${fileExt}`;
-			/*const response = await fetch(imagePath);
-			
-			const base64Image = await response.text()
-		
-			let base64Data = base64Image.replace(/^data:image\/\w+;base64,/, "");
+			const filePath = `${Math.random()}.${fileExt}`;//randomly generate name for file
 
-			// Initialize an array to collect valid base64 characters
-			let cleanedBase64Array = [];
-
-			// Loop through the base64 data and collect valid characters
-			for (let i = 0; i < base64Data.length; i++) {
-    			const char = base64Data[i];
-    			if (/^[A-Za-z0-9+/=]$/.test(char)) {
-        			cleanedBase64Array.push(char); // Push valid characters into the array
-    			}
-			}
-			// Join the array to form the cleaned base64 string
-			let cleanedBase64 = cleanedBase64Array.join('');*/
 			const base64 = await uriToBase64(imagePath);
 			
-			const { data: uploadData, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, base64, {
+			const { data: uploadData, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, decode(base64), {
 				contentType: "image/"+fileExt,
 				//maybe upsert: 'true' for overriding?
 			  })
