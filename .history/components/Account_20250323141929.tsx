@@ -143,6 +143,8 @@ export default function Account({ session }: { session: Session }) {
 	}) {
 		try {
 			setLoading(true);
+			console.log(imagePath, storedAvatarUrl)//if image, image path initially signed url
+			console.log(imagePath.includes(storedAvatarUrl))
 			if (!session?.user) throw new Error("No user on the session!");
 			if (imagePath == "") throw new Error('You must select an image to upload.')
 
@@ -196,6 +198,7 @@ export default function Account({ session }: { session: Session }) {
 					<TouchableOpacity onPress={pickImage}>
 						<Avatar.Image size={100} source={{ uri: localAvatarUrl }} />
 					</TouchableOpacity>
+					{localAvatarUrl != storedAvatarUrl && <Text>Visible</Text>}
 					<Button
 						mode="text"
 						onPress={pickImage}

@@ -34,7 +34,7 @@ export default function Account({ session }: { session: Session }) {
 		try {
 		  const { data, error: signedUrlError } = await supabase.storage
 			.from('avatars')
-			.createSignedUrl(path, 20);
+			.createSignedUrl(path, 20); // 60 seconds expiry
 	  
 		  if (signedUrlError) {
 			throw signedUrlError;
@@ -47,14 +47,16 @@ export default function Account({ session }: { session: Session }) {
 	  }
 	async function downloadImage(path: string) {
 		try {
-			/*const { data, error } = await supabase.storage
+			const { data, error } = await supabase.storage
 				.from("avatars")
 				.download(path);
 			if (error) {
 				throw error;
-			}*/
+			}
 			const signedUrl = await getSignedUrl(path)
-			setLocalAvatarUrl(signedUrl||'');
+			const e = await data.arrayBuffer()
+			console.log(data)
+			setLocalAvatarUrl(path);
 		} catch (error) {
 			console.log("Error downloading image: ", error);
 		}
@@ -147,25 +149,24 @@ export default function Account({ session }: { session: Session }) {
 			if (imagePath == "") throw new Error('You must select an image to upload.')
 
 			// Upload the image to the server
-			if (!imagePath.includes(storedAvatarUrl)) {
-				const fileExt = imagePath.split('.').pop();
-				const filePath = `${Math.random()}.${fileExt}`;//randomly generate name for file
+			const fileExt = imagePath.split('.').pop();
+			const filePath = `${Math.random()}.${fileExt}`;//randomly generate name for file
 
-				const base64 = await uriToBase64(imagePath);
-				
-				const { data: uploadData, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, decode(base64), {
-					contentType: "image/"+fileExt,
-				})
-				setStoredAvatarUrl(filePath);
+			const base64 = await uriToBase64(imagePath);
+			
+			const { data: uploadData, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, decode(base64), {
+				contentType: "image/"+fileExt,
+				//maybe upsert: 'true' for overriding?
+			  })
+			  setStoredAvatarUrl(filePath);
 
-				if (uploadError) {
-					throw uploadError;
-				}
+			if (uploadError) {
+				throw uploadError;
 			}
 			const updates = {
 				id: session?.user.id,
 				updated_at: new Date(),
-				avatar_url: storedAvatarUrl,
+				avatar_url: filePath,
 				bio: bio,
 				full_name: name,
 			};

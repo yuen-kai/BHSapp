@@ -4,7 +4,6 @@ import { Text, Button, TextInput, useTheme, Card } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js'
 import { supabase } from '../../lib/supabase'
 import { Session } from "@supabase/supabase-js";
-import { SafeAreaView } from 'react-native-safe-area-context';
 /*const supabaseUrl = 'https://mvfdwktreukpbcypbrvy.supabase.co'
 const supabaseKey = process.env.SUPABASE_KEY
 const supabase = createClient(supabaseUrl, supabaseKey)*/
@@ -131,7 +130,7 @@ export default function Announcements() {
     }, [announcements, profiles]);
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <Text style={[styles.title, { color: colors.primary }]}>Announcements</Text>
             <FlatList
                 data={announcements}
@@ -148,11 +147,11 @@ export default function Announcements() {
                     return (
                         <Card style={{backgroundColor: colors.background, marginBottom: 20, padding: 20, borderColor: colors.primary}}>
                             <Text style={[styles.title, {color: colors.primary, marginBottom: 8, flex: 1, textAlign: 'left'}]}>{item.title}</Text>
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 2}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between center', alignItems: 'center', flex: 2}}>
                                 <Text style={[styles.item, { color: colors.primary, marginBottom: 10, textAlign: 'left'}]}>{profile ? (profile.full_name)? profile.full_name:'Unknown' : 'Loading...'}</Text>
                                 <Text style={[styles.item, { color: colors.primary,textAlign: 'right', fontSize: 12}]}>{item ? created : 'Loading...'}</Text>
                             </View>
-                            <Text style={[styles.item, {flex: 3}]}>{item.content}</Text>
+                            <Text style={styles.item}>{item.content}</Text>
                         </Card>
                     )
                 }}
@@ -172,7 +171,7 @@ export default function Announcements() {
             <Button mode="contained" onPress={addAnnouncement}>
                 Add
             </Button>
-        </SafeAreaView>
+        </View>
     );
 }
 

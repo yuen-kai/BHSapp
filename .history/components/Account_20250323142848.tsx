@@ -80,6 +80,7 @@ export default function Account({ session }: { session: Session }) {
 			if (data) {
 				setName(data.full_name);
 				setBio(data.bio);
+				setLocalAvatarUrl(data.avatar_url)
 				setStoredAvatarUrl(data.avatar_url);
 			}
 		} catch (error) {
@@ -196,6 +197,7 @@ export default function Account({ session }: { session: Session }) {
 					<TouchableOpacity onPress={pickImage}>
 						<Avatar.Image size={100} source={{ uri: localAvatarUrl }} />
 					</TouchableOpacity>
+					{localAvatarUrl === storedAvatarUrl && <Text>Visible</Text>}
 					<Button
 						mode="text"
 						onPress={pickImage}

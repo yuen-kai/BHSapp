@@ -159,8 +159,9 @@ export default function HomeScreen() {
 			if (nearestStart && nearestEnd) {//still sometimes loss in precision in certain minutes, sometimes 55.00000001 or smth
 				const totalMinutes = Math.round(getDifferenceInMinutes(nearestStart, nearestEnd))
 				const minutesPast = Math.round(getDifferenceInMinutes(nearestStart, new Date()))
-				const progressValue = clamp(Number((minutesPast/totalMinutes).toFixed(1)), 0, 1)//11:26AM
-				setProgress(progressValue);//only accepts tenths place always and 
+				console.log((minutesPast / totalMinutes).toFixed(0))
+				const progressValue = Number(clamp(Math.round(minutesPast / totalMinutes * 100)/100, 0, 1))//11:26AM
+				setProgress(progressValue);
 			}
 		}, 1000);
 		return () => clearInterval(interval);

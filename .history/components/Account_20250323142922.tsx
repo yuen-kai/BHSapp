@@ -196,6 +196,7 @@ export default function Account({ session }: { session: Session }) {
 					<TouchableOpacity onPress={pickImage}>
 						<Avatar.Image size={100} source={{ uri: localAvatarUrl }} />
 					</TouchableOpacity>
+					{localAvatarUrl === storedAvatarUrl && <Text>Visible</Text>}
 					<Button
 						mode="text"
 						onPress={pickImage}

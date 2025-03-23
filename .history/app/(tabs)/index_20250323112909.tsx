@@ -38,7 +38,7 @@ export default function HomeScreen() {
 
 	const weekDaySchedule = [
 		[//sunday temp, had to add so app still works, 
-			{ block: "Sunday", start: "12:00 am", end: "11:59 pm", lunch: false }//11:31-32 am sunday with sunday 11:10am-11:49am
+			{ block: "Sunday", start: "12:00 am", end: "11:59 pm", lunch: false }
 		],
 		[//monday
 			{ block: "A", start: "8:20 am", end: "9:15 am", lunch: false },
@@ -83,7 +83,7 @@ export default function HomeScreen() {
 			{ block: "G", start: "2:00 pm", end: "2:55 pm", lunch: false }
 		],
 		[//saturday, had to add so app still works, 
-			{ block: "Saturday", start: "12:00 am", end: "11:59 pm", lunch: false }
+			{ block: "Saturday", start: "11:26 am", end: "11:42 am", lunch: false }
 		]
 	];
 
@@ -157,10 +157,10 @@ export default function HomeScreen() {
 				return;
 			}
 			if (nearestStart && nearestEnd) {//still sometimes loss in precision in certain minutes, sometimes 55.00000001 or smth
-				const totalMinutes = Math.round(getDifferenceInMinutes(nearestStart, nearestEnd))
-				const minutesPast = Math.round(getDifferenceInMinutes(nearestStart, new Date()))
-				const progressValue = clamp(Number((minutesPast/totalMinutes).toFixed(1)), 0, 1)//11:26AM
-				setProgress(progressValue);//only accepts tenths place always and 
+				const totalMinutes = getDifferenceInMinutes(nearestStart, nearestEnd);
+				const minutesPast = getDifferenceInMinutes(nearestStart, new Date());
+				const progressValue = clamp(Math.round(minutesPast / totalMinutes * 100)/100, 0, 1);//11:26AM
+				setProgress(progressValue);
 			}
 		}, 1000);
 		return () => clearInterval(interval);

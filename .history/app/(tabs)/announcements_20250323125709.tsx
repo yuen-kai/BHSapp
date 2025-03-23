@@ -4,7 +4,6 @@ import { Text, Button, TextInput, useTheme, Card } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js'
 import { supabase } from '../../lib/supabase'
 import { Session } from "@supabase/supabase-js";
-import { SafeAreaView } from 'react-native-safe-area-context';
 /*const supabaseUrl = 'https://mvfdwktreukpbcypbrvy.supabase.co'
 const supabaseKey = process.env.SUPABASE_KEY
 const supabase = createClient(supabaseUrl, supabaseKey)*/
@@ -131,7 +130,7 @@ export default function Announcements() {
     }, [announcements, profiles]);
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <Text style={[styles.title, { color: colors.primary }]}>Announcements</Text>
             <FlatList
                 data={announcements}
@@ -172,7 +171,7 @@ export default function Announcements() {
             <Button mode="contained" onPress={addAnnouncement}>
                 Add
             </Button>
-        </SafeAreaView>
+        </View>
     );
 }
 

@@ -143,24 +143,27 @@ export default function Account({ session }: { session: Session }) {
 	}) {
 		try {
 			setLoading(true);
+			console.log(imagePath, storedAvatarUrl)//if image, image path initially signed url
+			console.log(imagePath.includes(storedAvatarUrl))
 			if (!session?.user) throw new Error("No user on the session!");
 			if (imagePath == "") throw new Error('You must select an image to upload.')
 
 			// Upload the image to the server
+			let newUrl
 			if (!imagePath.includes(storedAvatarUrl)) {
-				const fileExt = imagePath.split('.').pop();
-				const filePath = `${Math.random()}.${fileExt}`;//randomly generate name for file
+			const fileExt = imagePath.split('.').pop();
+			const filePath = `${Math.random()}.${fileExt}`;//randomly generate name for file
 
-				const base64 = await uriToBase64(imagePath);
-				
-				const { data: uploadData, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, decode(base64), {
-					contentType: "image/"+fileExt,
-				})
-				setStoredAvatarUrl(filePath);
+			const base64 = await uriToBase64(imagePath);
+			
+			const { data: uploadData, error: uploadError } = await supabase.storage.from('avatars').upload(filePath, decode(base64), {
+				contentType: "image/"+fileExt,
+			  })
+			  setStoredAvatarUrl(filePath);
 
-				if (uploadError) {
-					throw uploadError;
-				}
+			if (uploadError) {
+				throw uploadError;
+			}
 			}
 			const updates = {
 				id: session?.user.id,
