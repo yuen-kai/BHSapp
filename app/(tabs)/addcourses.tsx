@@ -10,7 +10,7 @@ import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { useTheme, Text, TextInput, Button } from "react-native-paper";
 import { Dropdown } from "react-native-paper-dropdown";
 import { FlashList } from "@shopify/flash-list";
-import { Course, courses, sortCourses } from '@/config/coursesConfig';
+import { Course, courses, sortCourses } from '@/types/coursesConfig';
 import CourseInfoCard from "@/components/CourseInfoCard";
 
 const AddCourseScreen = () => {

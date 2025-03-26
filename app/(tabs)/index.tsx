@@ -10,7 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ProgressBar, MD3Colors } from "react-native-paper";
 import React, { useEffect } from "react";
 import { Font } from "react-native-paper/lib/typescript/types";
-import { Course, courses } from '@/config/coursesConfig';
+import { Course, courses } from '@/types/coursesConfig';
 import { FlashList } from "@shopify/flash-list";
 import { clamp } from "react-native-reanimated";
 
@@ -87,7 +87,7 @@ export default function HomeScreen() {
 		]
 	];
 
-	let schedule: Schedule[] = weekDaySchedule[new Date().getDay()];
+	let schedule: Schedule[] = weekDaySchedule[new Date().getDay()-1];
 	
 	const [timeRemaining, setTimeRemaining] = React.useState(0);
 
@@ -96,7 +96,8 @@ export default function HomeScreen() {
 		for (let i = 0; i < schedule.length; i++) {
 			const startTime = convertToDate(schedule[i].start);
 			const endTime = convertToDate(schedule[i].end);
-			if (startTime < now && now < endTime) {//
+			if (startTime < now && now < endTime) {
+				// console.log(startTime + " " + endTime)
 				return schedule[i]
 			}
 			if( i === 0 && now < startTime) {
@@ -273,7 +274,6 @@ const styles = StyleSheet.create({
 		margin: 16,
 		padding: 16,
 		elevation: 4,
-		backgroundColor: "#424c5e",
 		borderRadius: 8,
 	},
 	courseItemCard: {

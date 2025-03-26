@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, Alert } from 'react-native';
 import { Text, Button, TextInput, useTheme, Card } from 'react-native-paper';
-import { createClient } from '@supabase/supabase-js'
 import { supabase } from '../../lib/supabase'
 import { Session } from "@supabase/supabase-js";
 import { SafeAreaView } from 'react-native-safe-area-context';
-/*const supabaseUrl = 'https://mvfdwktreukpbcypbrvy.supabase.co'
-const supabaseKey = process.env.SUPABASE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey)*/
+import { Profile } from '@/types/types';
 
 
 type Announcement = {
@@ -24,15 +21,7 @@ export default function Announcements() {
     const [newTitle, setNewTitle] = useState('');
     const [newContent, setNewContent] = useState('');
     const [loading, setLoading] = useState(false);
-    const [profiles, setProfiles] = useState({});
-
-    /*type profile = {
-        id: string,
-        updated_at: Date,
-        avatar_url: string,
-        bio: string,
-        full_name: string,
-    };*/
+    const [profiles, setProfiles] = useState<{[id: string]: Profile}>({});
 
     async function profileData(uID: string) {
         try {

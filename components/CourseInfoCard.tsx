@@ -10,7 +10,7 @@ import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { useTheme, Text, TextInput, Button } from "react-native-paper";
 import { Dropdown } from "react-native-paper-dropdown";
 import { FlashList } from "@shopify/flash-list";
-import { Course } from '@/config/coursesConfig';
+import { Course } from '@/types/coursesConfig';
 
 const CourseInfoCard: React.FC<Course> = ({
 	name,
