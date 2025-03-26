@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, Alert } from 'react-native';
 import { Text, Button, TextInput, useTheme, Card, FAB } from 'react-native-paper';
+import { createClient } from '@supabase/supabase-js'
 import { supabase } from '../../lib/supabase'
 import { Session } from "@supabase/supabase-js";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Profile } from '@/types/types';
+/*const supabaseUrl = 'https://mvfdwktreukpbcypbrvy.supabase.co'
+const supabaseKey = process.env.SUPABASE_KEY
+const supabase = createClient(supabaseUrl, supabaseKey)*/
 
 
 type Announcement = {
@@ -20,7 +23,7 @@ export default function Announcements() {
     const [announcements, setAnnouncements] = useState<Announcement[]>([]);
     const [newTitle, setNewTitle] = useState('');
     const [newContent, setNewContent] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [addAnnouncementVisible, setAddAnnouncementVisible] = useState(false);
     const [profiles, setProfiles] = useState({});
 
     /*type profile = {
@@ -156,7 +159,7 @@ export default function Announcements() {
                 data={announcements}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => {
-                    const profile = profiles[item.user_id]
+                    const profile = profiles[item.user_id];
                     
                     const created = new Date(item.created_at).toLocaleString('en-US', {weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'})
                     return (
@@ -171,7 +174,7 @@ export default function Announcements() {
                     )
                 }}
             />
-            <FAB icon='plus' onPress={()=>setAddAnnouncementVisible(!addAnnouncementVisible)}/>
+            <FAB icon='plus' onPress={setAddAnnouncementVisible(!addAnnouncementVisible)}/>
         </SafeAreaView>
     );
 }

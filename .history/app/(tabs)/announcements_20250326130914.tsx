@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, Alert } from 'react-native';
-import { Text, Button, TextInput, useTheme, Card, FAB } from 'react-native-paper';
+import { Text, Button, TextInput, useTheme, Card } from 'react-native-paper';
+import { createClient } from '@supabase/supabase-js'
 import { supabase } from '../../lib/supabase'
 import { Session } from "@supabase/supabase-js";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Profile } from '@/types/types';
+/*const supabaseUrl = 'https://mvfdwktreukpbcypbrvy.supabase.co'
+const supabaseKey = process.env.SUPABASE_KEY
+const supabase = createClient(supabaseUrl, supabaseKey)*/
 
 
 type Announcement = {
@@ -126,29 +129,7 @@ export default function Announcements() {
         };
         fetchProfiles();
     }, [announcements, profiles]);
-    const newAnnouncementScr: React.FC<View> = ({}) => {
-        if (addAnnouncementVisible == true) {
-            return (
-                <View>
-                    <TextInput
-                        label="New Announcement"
-                        value={newTitle}
-                        onChangeText={setNewTitle}
-                        style={styles.input}
-                    />
-                    <TextInput
-                        label="Body"
-                        value={newContent}
-                        onChangeText={setNewContent}
-                        style={styles.input}
-                    />
-                    <Button mode="contained" onPress={addAnnouncement}>
-                        Add
-                    </Button>
-                </View>
-            )
-        }
-    }
+
     return (
         <SafeAreaView style={styles.container}>
             <Text style={[styles.title, { color: colors.primary }]}>Announcements</Text>
@@ -156,7 +137,7 @@ export default function Announcements() {
                 data={announcements}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => {
-                    const profile = profiles[item.user_id]
+                    const profile = profiles[item.user_id];
                     
                     const created = new Date(item.created_at).toLocaleString('en-US', {weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'})
                     return (
@@ -171,7 +152,21 @@ export default function Announcements() {
                     )
                 }}
             />
-            <FAB icon='plus' onPress={()=>setAddAnnouncementVisible(!addAnnouncementVisible)}/>
+            <TextInput
+                label="New Announcement"
+                value={newTitle}
+                onChangeText={setNewTitle}
+                style={styles.input}
+            />
+            <TextInput
+                label="Body"
+                value={newContent}
+                onChangeText={setNewContent}
+                style={styles.input}
+            />
+            <Button mode="contained" onPress={addAnnouncement}>
+                Add
+            </Button>
         </SafeAreaView>
     );
 }

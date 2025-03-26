@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, Alert } from 'react-native';
 import { Text, Button, TextInput, useTheme, Card, FAB } from 'react-native-paper';
+import { createClient } from '@supabase/supabase-js'
 import { supabase } from '../../lib/supabase'
 import { Session } from "@supabase/supabase-js";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Profile } from '@/types/types';
+/*const supabaseUrl = 'https://mvfdwktreukpbcypbrvy.supabase.co'
+const supabaseKey = process.env.SUPABASE_KEY
+const supabase = createClient(supabaseUrl, supabaseKey)*/
 
 
 type Announcement = {
@@ -20,16 +23,16 @@ export default function Announcements() {
     const [announcements, setAnnouncements] = useState<Announcement[]>([]);
     const [newTitle, setNewTitle] = useState('');
     const [newContent, setNewContent] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [addAnnouncementVisible, setAddAnnouncementVisible] = useState(false);
     const [profiles, setProfiles] = useState({});
 
-    /*type profile = {
+    type profile = {
         id: string,
         updated_at: Date,
         avatar_url: string,
         bio: string,
         full_name: string,
-    };*/
+    };
 
     async function profileData(uID: string) {
         try {
@@ -157,6 +160,7 @@ export default function Announcements() {
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => {
                     const profile = profiles[item.user_id]
+                    console.log(profile)
                     
                     const created = new Date(item.created_at).toLocaleString('en-US', {weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'})
                     return (
