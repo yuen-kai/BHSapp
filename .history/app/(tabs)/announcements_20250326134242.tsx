@@ -159,7 +159,7 @@ export default function Announcements() {
                 data={announcements}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => {
-                    const profile = profiles[item.user_id]
+                    //const profile = profiles[item.user_id]
                     
                     const created = new Date(item.created_at).toLocaleString('en-US', {weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'})
                     return (

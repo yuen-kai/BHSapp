@@ -174,7 +174,7 @@ export default function Announcements() {
                     )
                 }}
             />
-            <FAB icon='plus' onPress={()=>setAddAnnouncementVisible(!addAnnouncementVisible)}/>
+            
         </SafeAreaView>
     );
 }

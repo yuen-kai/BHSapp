@@ -26,13 +26,13 @@ export default function Announcements() {
     const [addAnnouncementVisible, setAddAnnouncementVisible] = useState(false);
     const [profiles, setProfiles] = useState({});
 
-    type profile = {
+    /*type profile = {
         id: string,
         updated_at: Date,
         avatar_url: string,
         bio: string,
         full_name: string,
-    };
+    };*/
 
     async function profileData(uID: string) {
         try {
@@ -159,7 +159,7 @@ export default function Announcements() {
                 data={announcements}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => {
-                    const profile = profiles[item.user_id]
+                    const profile = profiles[item.user_id];
                     
                     const created = new Date(item.created_at).toLocaleString('en-US', {weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'})
                     return (
@@ -174,7 +174,7 @@ export default function Announcements() {
                     )
                 }}
             />
-            <FAB icon='plus' onPress={()=>setAddAnnouncementVisible(!addAnnouncementVisible)}/>
+            <FAB icon='plus' onPress={setAddAnnouncementVisible(!addAnnouncementVisible)}/>
         </SafeAreaView>
     );
 }

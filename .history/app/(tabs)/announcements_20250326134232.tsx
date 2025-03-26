@@ -160,6 +160,7 @@ export default function Announcements() {
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => {
                     const profile = profiles[item.user_id]
+                    console.log(profile)
                     
                     const created = new Date(item.created_at).toLocaleString('en-US', {weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'})
                     return (

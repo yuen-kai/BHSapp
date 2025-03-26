@@ -114,7 +114,7 @@ export default function Announcements() {
     }
 
     useEffect(() => {//only used to be able to connect the async profile data function to load onto announcements
-        const fetchProfiles = async () => {
+        /*const fetchProfiles = async () => {
             for (const announcement of announcements) {
                 if (!profiles[announcement.user_id]) {
                     const profile = await profileData(announcement.user_id);
@@ -127,7 +127,7 @@ export default function Announcements() {
                 }
             }
         };
-        fetchProfiles();
+        fetchProfiles();*/
     }, [announcements, profiles]);
     const newAnnouncementScr: React.FC<View> = ({}) => {
         if (addAnnouncementVisible == true) {

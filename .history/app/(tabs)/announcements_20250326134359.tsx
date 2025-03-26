@@ -129,7 +129,7 @@ export default function Announcements() {
         };
         fetchProfiles();
     }, [announcements, profiles]);
-    const newAnnouncementScr: React.FC<View> = ({}) => {
+    /*const newAnnouncementScr: React.FC<View> = ({}) => {
         if (addAnnouncementVisible == true) {
             return (
                 <View>
@@ -151,7 +151,7 @@ export default function Announcements() {
                 </View>
             )
         }
-    }
+    }*/
     return (
         <SafeAreaView style={styles.container}>
             <Text style={[styles.title, { color: colors.primary }]}>Announcements</Text>
