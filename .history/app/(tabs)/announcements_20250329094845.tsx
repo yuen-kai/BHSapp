@@ -134,6 +134,7 @@ export default function Announcements() {
             <FlatList
                 data={announcements}
                 keyExtractor={(item) => item.id.toString()}
+                style={{backgroundColor: 'red'}}//temporary
                 renderItem={({ item }) => {
                     const profile = profiles[item.user_id]
                     
@@ -150,7 +151,7 @@ export default function Announcements() {
                     )
                 }}
             />
-            <FAB icon='plus' onPress={()=>setAddAnnouncementVisible(!addAnnouncementVisible)} style={{alignSelf: 'flex-end', position: 'fixed'}}/>
+            
             {addAnnouncementVisible && (
                 <Card style={{padding: 7, marginTop: 10, position: 'fixed'}}>
                     <TextInput

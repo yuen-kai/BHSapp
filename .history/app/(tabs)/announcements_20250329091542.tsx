@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList, Alert, Animated, useAnimatedValue } from 'react-native';
+import { View, StyleSheet, FlatList, Alert } from 'react-native';
 import { Text, Button, TextInput, useTheme, Card, FAB } from 'react-native-paper';
 import { supabase } from '../../lib/supabase'
 import { Session } from "@supabase/supabase-js";
@@ -150,26 +150,25 @@ export default function Announcements() {
                     )
                 }}
             />
-            <FAB icon='plus' onPress={()=>setAddAnnouncementVisible(!addAnnouncementVisible)} style={{alignSelf: 'flex-end', position: 'fixed'}}/>
+            <FAB icon='plus' onPress={()=>setAddAnnouncementVisible(!addAnnouncementVisible)}/>
             {addAnnouncementVisible && (
-                <Card style={{padding: 7, marginTop: 10, position: 'fixed'}}>
-                    <TextInput
-                        label="New Announcement"
-                        value={newTitle}
-                        onChangeText={setNewTitle}
-                        style={styles.input}
-                    />
-                    <TextInput
-                        label="Body"
-                        value={newContent}
-                        onChangeText={setNewContent}
-                        style={styles.input}
-                        multiline={true}
-                    />
-                    <Button mode="contained" onPress={addAnnouncement}>
-                        Add
-                    </Button>
-                </Card>
+                <View>
+                <TextInput
+                    label="New Announcement"
+                    value={newTitle}
+                    onChangeText={setNewTitle}
+                    style={styles.input}
+                />
+                <TextInput
+                    label="Body"
+                    value={newContent}
+                    onChangeText={setNewContent}
+                    style={styles.input}
+                />
+                <Button mode="contained" onPress={addAnnouncement}>
+                    Add
+                </Button>
+            </View>
             )}
         </SafeAreaView>
     );

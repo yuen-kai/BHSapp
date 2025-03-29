@@ -164,7 +164,6 @@ export default function Announcements() {
                         value={newContent}
                         onChangeText={setNewContent}
                         style={styles.input}
-                        multiline={true}
                     />
                     <Button mode="contained" onPress={addAnnouncement}>
                         Add

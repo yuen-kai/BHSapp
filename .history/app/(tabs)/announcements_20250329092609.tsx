@@ -150,9 +150,9 @@ export default function Announcements() {
                     )
                 }}
             />
-            <FAB icon='plus' onPress={()=>setAddAnnouncementVisible(!addAnnouncementVisible)} style={{alignSelf: 'flex-end', position: 'fixed'}}/>
+            <FAB icon='plus' onPress={()=>setAddAnnouncementVisible(!addAnnouncementVisible)} style={{alignSelf: 'flex-end'}}/>
             {addAnnouncementVisible && (
-                <Card style={{padding: 7, marginTop: 10, position: 'fixed'}}>
+                <Card style={{padding: 7, marginTop: 10}}>
                     <TextInput
                         label="New Announcement"
                         value={newTitle}
@@ -164,7 +164,6 @@ export default function Announcements() {
                         value={newContent}
                         onChangeText={setNewContent}
                         style={styles.input}
-                        multiline={true}
                     />
                     <Button mode="contained" onPress={addAnnouncement}>
                         Add

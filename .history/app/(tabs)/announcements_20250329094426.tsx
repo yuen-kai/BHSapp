@@ -134,6 +134,7 @@ export default function Announcements() {
             <FlatList
                 data={announcements}
                 keyExtractor={(item) => item.id.toString()}
+                style={{height: '100'}}
                 renderItem={({ item }) => {
                     const profile = profiles[item.user_id]
                     
