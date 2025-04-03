@@ -21,7 +21,7 @@ export default function Announcements() {
     const [newTitle, setNewTitle] = useState('');
     const [newContent, setNewContent] = useState('');
     const [loading, setLoading] = useState(false);
-    const [profiles, setProfiles] = useState({});
+    const [profiles, setProfiles] = useState<Record<string, Profile>>({});
     const [addAnnouncementVisible, setAddAnnouncementVisible] = useState(true)
 
     /*type profile = {

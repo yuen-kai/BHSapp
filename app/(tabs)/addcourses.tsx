@@ -10,8 +10,9 @@ import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { useTheme, Text, TextInput, Button } from "react-native-paper";
 import { Dropdown } from "react-native-paper-dropdown";
 import { FlashList } from "@shopify/flash-list";
-import { Course, courses, sortCourses } from '@/types/coursesConfig';
+import { Course} from '@/types/coursesConfig';
 import CourseInfoCard from "@/components/CourseInfoCard";
+import useStore from "@/store";
 
 const AddCourseScreen = () => {
 	const { colors } = useTheme();
@@ -22,6 +23,7 @@ const AddCourseScreen = () => {
 	const [term, setTerm] = useState(NaN);
 	const [roomNumber, setRoomNumber] = useState("");
 	const [addedCourses, setAddedCourses] = useState<Course[]>([]);
+	const {courses, setCourses, sortCourses} = useStore()
 
 	const blockOptions = [
 		{ label: "A", value: "A" },
@@ -106,9 +108,9 @@ const AddCourseScreen = () => {
 						value={courseBlock}
 						onSelect={(value) => setCourseBlock(value || "")}
 						mode={"outlined"}
-						// style={[styles.input]}
-						// placeholderStyle={styles.placeholderStyle}
-						// selectedTextStyle={styles.selectedTextStyle}
+					// style={[styles.input]}
+					// placeholderStyle={styles.placeholderStyle}
+					// selectedTextStyle={styles.selectedTextStyle}
 					/>
 				</View>
 				<View style={styles.input}>
@@ -120,9 +122,9 @@ const AddCourseScreen = () => {
 						onSelect={(value) => setLunch(Number(value) || NaN)}
 						mode={"outlined"}
 
-						// style={[styles.input, styles.dropdown]}
-						// placeholderStyle={styles.placeholderStyle}
-						// selectedTextStyle={styles.selectedTextStyle}
+					// style={[styles.input, styles.dropdown]}
+					// placeholderStyle={styles.placeholderStyle}
+					// selectedTextStyle={styles.selectedTextStyle}
 					/>
 				</View>
 				<View style={styles.input}>
@@ -134,23 +136,20 @@ const AddCourseScreen = () => {
 						onSelect={(value) => setTerm(Number(value) || NaN)}
 						mode={"outlined"}
 
-						// style={[styles.input, styles.dropdown]}
-						// placeholderStyle={styles.placeholderStyle}
-						// selectedTextStyle={styles.selectedTextStyle}
+					// style={[styles.input, styles.dropdown]}
+					// placeholderStyle={styles.placeholderStyle}
+					// selectedTextStyle={styles.selectedTextStyle}
 					/>
 				</View>
-				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-					<>
-						<TextInput
-							label="Room Number"
-							value={roomNumber}
-							onChangeText={(text) => setRoomNumber(text)}
-							mode="outlined"
-							style={styles.input}
-							onSubmitEditing={Keyboard.dismiss}
-						/>
-					</>
-				</TouchableWithoutFeedback>
+				<TextInput
+					label="Room Number"
+					value={roomNumber}
+					onChangeText={(text) => setRoomNumber(text)}
+					mode="outlined"
+					style={styles.input}
+					onSubmitEditing={Keyboard.dismiss}
+				/>
+
 				<Button
 					mode="contained"
 					onPress={handleAddCourse}
@@ -170,7 +169,7 @@ const AddCourseScreen = () => {
 								block={item.block}
 								lunch={item.lunch}
 								term={item.term}
-								roomNumber={item.roomNumber}/>
+								roomNumber={item.roomNumber} />
 						)}
 						estimatedItemSize={100}
 					/>
