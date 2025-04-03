@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, Alert, Animated, useAnimatedValue } from 'react-native';
-import { Text, Button, TextInput, useTheme, Card, FAB, Modal } from 'react-native-paper';
+import { Text, Button, TextInput, useTheme, Card, FAB } from 'react-native-paper';
 import { supabase } from '../../lib/supabase'
 import { Session } from "@supabase/supabase-js";
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -21,7 +21,7 @@ export default function Announcements() {
     const [newTitle, setNewTitle] = useState('');
     const [newContent, setNewContent] = useState('');
     const [loading, setLoading] = useState(false);
-    const [profiles, setProfiles] = useState<Record<string, Profile>>({});
+    const [profiles, setProfiles] = useState({});
     const [addAnnouncementVisible, setAddAnnouncementVisible] = useState(true)
 
     /*type profile = {
@@ -150,10 +150,9 @@ export default function Announcements() {
                     )
                 }}
             />
-            <View style={{position: 'absolute', bottom: 0, width: '100%', alignSelf: 'center'}}>
-            <FAB icon='plus' onPress={()=>setAddAnnouncementVisible(!addAnnouncementVisible)} style={{alignSelf: 'flex-end', position: 'fixed', bottom: 20}}/>
+            <FAB icon='plus' onPress={()=>setAddAnnouncementVisible(!addAnnouncementVisible)} style={{alignSelf: 'flex-end', position: 'absolute', bottom: 20, right: 20}}/>
             {addAnnouncementVisible && (
-                <Card style={{padding: 7, marginTop: 5, position: 'fixed', marginBottom: 20}}>
+                <Card style={{padding: 7, marginTop: 10, position: 'fixed'}}>
                     <TextInput
                         label="New Announcement"
                         value={newTitle}
@@ -172,8 +171,6 @@ export default function Announcements() {
                     </Button>
                 </Card>
             )}
-            </View>
-            
         </SafeAreaView>
     );
 }
