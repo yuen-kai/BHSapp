@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from "react";
+import React, { useState } from "react";
 import {
 	View,
 	StyleSheet,
@@ -11,31 +11,25 @@ import { useTheme, Text, TextInput, FAB } from "react-native-paper";
 import { Dropdown } from "react-native-paper-dropdown";
 import { FlashList } from "@shopify/flash-list";
 import { Course } from '@/types/coursesConfig';
-import useStore, {sortCoursesFunction} from '@/store'
+import useStore from '@/store'
 
-interface CourseInfoCardProps {
-	name: string;
-	teacher: string;
-	block: string;
-	lunch: number;
-	term: number;
-	roomNumber: string;
-	children?: ReactNode; // Adding children here
-  }
+const { courses, setCourses } = useStore() 
 
-const CourseInfoCard: React.FC<CourseInfoCardProps> = ({
+const CourseInfoCard: React.FC<Course> = ({
 	name,
 	teacher,
 	block,
 	lunch,
 	term,
 	roomNumber,
-	children
 }) => {
 	const { colors } = useTheme();
+	const deleteCourse = (c:Course[]) => {
+
+	}
 	return (
 		<View style={[styles.courseCard, { borderColor: colors.primary }]}>
-			{children}
+			<FAB style={{backgroundColor: 'red'}} icon='alpha-x' onPress={() => deleteCourse([{"block": block, "lunch": lunch, "name": name, "roomNumber": roomNumber, "teacher": teacher, "term": term}])}></FAB>
 			<Text style={styles.courseText}>
 				<Text style={styles.bold}>Name:</Text> {name}
 			</Text>

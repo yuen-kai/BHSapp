@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from "react";
+import React, { useState } from "react";
 import {
 	View,
 	StyleSheet,
@@ -7,35 +7,23 @@ import {
 } from "react-native";
 
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
-import { useTheme, Text, TextInput, FAB } from "react-native-paper";
+import { useTheme, Text, TextInput, Button } from "react-native-paper";
 import { Dropdown } from "react-native-paper-dropdown";
 import { FlashList } from "@shopify/flash-list";
 import { Course } from '@/types/coursesConfig';
-import useStore, {sortCoursesFunction} from '@/store'
 
-interface CourseInfoCardProps {
-	name: string;
-	teacher: string;
-	block: string;
-	lunch: number;
-	term: number;
-	roomNumber: string;
-	children?: ReactNode; // Adding children here
-  }
-
-const CourseInfoCard: React.FC<CourseInfoCardProps> = ({
+const CourseInfoCard: React.FC<Course> = ({
 	name,
 	teacher,
 	block,
 	lunch,
 	term,
 	roomNumber,
-	children
 }) => {
 	const { colors } = useTheme();
+
 	return (
 		<View style={[styles.courseCard, { borderColor: colors.primary }]}>
-			{children}
 			<Text style={styles.courseText}>
 				<Text style={styles.bold}>Name:</Text> {name}
 			</Text>

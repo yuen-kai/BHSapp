@@ -33,9 +33,18 @@ const CourseInfoCard: React.FC<CourseInfoCardProps> = ({
 	children
 }) => {
 	const { colors } = useTheme();
+	const { courses, setCourses } = useStore() 
+	console.log(courses)
+
+	const deleteCourse = (c:Course) => {
+		console.log(c)
+		let newList = courses.splice(courses.indexOf(c))
+		setCourses(newList)
+		console.log(courses)
+	}
 	return (
 		<View style={[styles.courseCard, { borderColor: colors.primary }]}>
-			{children}
+			<FAB style={{backgroundColor: 'red', aspectRatio: 1, width: 50, alignSelf: 'flex-end', position: 'absolute', alignItems: 'center', justifyContent: 'center', zIndex: 5}} icon='alpha-x' onPress={() => deleteCourse({"block": block, "lunch": lunch, "name": name, "roomNumber": roomNumber, "teacher": teacher, "term": term})}></FAB>
 			<Text style={styles.courseText}>
 				<Text style={styles.bold}>Name:</Text> {name}
 			</Text>

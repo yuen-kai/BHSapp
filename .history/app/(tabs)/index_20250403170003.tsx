@@ -16,7 +16,7 @@ import { FlashList } from "@shopify/flash-list";
 import { clamp } from "react-native-reanimated";
 
 export default function HomeScreen() {
-	const { courses } = useStore()
+	const courses = useStore((state) => state.courses)
 	type Schedule = {
 		block: string;
 		start: string;
@@ -231,7 +231,7 @@ export default function HomeScreen() {
 			{/* Course List */}
 			<FlashList
 				data={courses}
-				keyExtractor={(item) => `${item.name}-${item.block}-${item.teacher}-${item.term}-${item.roomNumber}`}
+				keyExtractor={(item, index) => `${item.name}-${index}`}//formerly for item.block but item.block is not unique
 				estimatedItemSize={100}
 				renderItem={({ item }) => {
 					const times = schedule.find((s) => s.block === item.block);

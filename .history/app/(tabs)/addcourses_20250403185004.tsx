@@ -63,7 +63,6 @@ const AddCourseScreen = () => {
 
 		setAddedCourses([...addedCourses, newCourse]);
 		setCourses(sortCoursesFunction([...addedCourses, newCourse]))
-		console.log(courses)
 		// Clear inputs
 		setCourseName("");
 		setCourseTeacher("");
@@ -73,22 +72,10 @@ const AddCourseScreen = () => {
 		setRoomNumber("");
 	};
 	const deleteCourse = (c:Course) => {
-		console.log(c, courses)
-		const indexToRemove = courses.findIndex(course => 
-			course.name === c.name && 
-			course.block === c.block && 
-			course.lunch === c.lunch && 
-			course.roomNumber === c.roomNumber &&
-			course.teacher === c.teacher &&
-			course.term === c.term
-		);
-	
-		if (indexToRemove !== -1) {
-			courses.splice(indexToRemove, 1); // Remove the item if found
-		}
-		console.log(courses)
-		setAddedCourses(sortCoursesFunction(courses))
-		setCourses(sortCoursesFunction(courses))
+		console.log(c)
+		let newList = courses.splice(courses.indexOf(c))
+		setAddedCourses(sortCoursesFunction(newList))
+		setCourses(sortCoursesFunction(newList))
 		console.log(courses)
 	}
 
@@ -181,7 +168,7 @@ const AddCourseScreen = () => {
 					<Text style={styles.subTitle}>Added Courses</Text>
 					<FlashList
 						data={courses}
-						keyExtractor={(item) => `${item.name}-${item.block}-${item.teacher}-${item.term}-${item.roomNumber}`}
+						keyExtractor={(item, index) => index.toString()}
 						
 						renderItem={({ item }) => (
 							<CourseInfoCard
@@ -191,7 +178,7 @@ const AddCourseScreen = () => {
 								lunch={item.lunch}
 								term={item.term}
 								roomNumber={item.roomNumber}>
-								<FAB style={{backgroundColor: 'red', aspectRatio: 1, alignSelf: 'flex-end', position: 'absolute', alignItems: 'center', justifyContent: 'center', zIndex: 5}} icon='alpha-x' size='medium' onPress={() => deleteCourse({"block": item.block, "lunch": item.lunch, "name": item.name, "roomNumber": item.roomNumber, "teacher": item.teacher, "term": item.term})}></FAB>
+								<FAB style={{backgroundColor: 'red', aspectRatio: 1, width: 50, alignSelf: 'flex-end', position: 'absolute', alignItems: 'center', justifyContent: 'center', zIndex: 5}} icon='alpha-x' onPress={() => deleteCourse({"block": item.block, "lunch": item.lunch, "name": item.name, "roomNumber": item.roomNumber, "teacher": item.teacher, "term": item.term})}></FAB>
 							</CourseInfoCard>
 						)}
 						estimatedItemSize={100}

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { Course } from '@/types/coursesConfig';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const storeCourses = async (value: Course[]) => {
@@ -10,26 +10,11 @@ const storeCourses = async (value: Course[]) => {
         // saving error
     }
 };
-const getCourses = async (): Promise<Course[]> => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('courses');
-      return jsonValue != null ? JSON.parse(jsonValue) : [];
-    } catch (e) {
-      // error reading value
-      return []
-    }
-  };
+
 interface Store {
     courses: Course[];
     setCourses: (courses: Course[]) => void;
 }
-
-const initializeStore = async (set: any) => {
-    const savedCourses = await getCourses();
-    const sortedCourses = sortCoursesFunction(savedCourses);
-    set({ courses: sortedCourses });
-    storeCourses(sortedCourses); // Save sorted courses back to AsyncStorage
-};
 
 export const sortCoursesFunction = (newCourses: Course[]): Course[] => {//also must update courses
     let newCourseList = [];
@@ -53,6 +38,16 @@ const useStore = create<Store>((set) => ({
     },
 }));
 
-initializeStore(useStore.setState);
+const getCourses = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('courses');
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      // error reading value
+      return []
+    }
+  };
+const { setCourses } = useStore()
+setCourses(await getCourses())
 
 export default useStore;

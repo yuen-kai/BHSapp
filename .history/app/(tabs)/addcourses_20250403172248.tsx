@@ -7,7 +7,7 @@ import {
 } from "react-native";
 
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
-import { useTheme, Text, TextInput, Button, FAB } from "react-native-paper";
+import { useTheme, Text, TextInput, Button } from "react-native-paper";
 import { Dropdown } from "react-native-paper-dropdown";
 import { FlashList } from "@shopify/flash-list";
 import { Course } from '@/types/coursesConfig';
@@ -63,7 +63,6 @@ const AddCourseScreen = () => {
 
 		setAddedCourses([...addedCourses, newCourse]);
 		setCourses(sortCoursesFunction([...addedCourses, newCourse]))
-		console.log(courses)
 		// Clear inputs
 		setCourseName("");
 		setCourseTeacher("");
@@ -72,25 +71,6 @@ const AddCourseScreen = () => {
 		setTerm(NaN);
 		setRoomNumber("");
 	};
-	const deleteCourse = (c:Course) => {
-		console.log(c, courses)
-		const indexToRemove = courses.findIndex(course => 
-			course.name === c.name && 
-			course.block === c.block && 
-			course.lunch === c.lunch && 
-			course.roomNumber === c.roomNumber &&
-			course.teacher === c.teacher &&
-			course.term === c.term
-		);
-	
-		if (indexToRemove !== -1) {
-			courses.splice(indexToRemove, 1); // Remove the item if found
-		}
-		console.log(courses)
-		setAddedCourses(sortCoursesFunction(courses))
-		setCourses(sortCoursesFunction(courses))
-		console.log(courses)
-	}
 
 	return (
 		<SafeAreaProvider>
@@ -181,8 +161,7 @@ const AddCourseScreen = () => {
 					<Text style={styles.subTitle}>Added Courses</Text>
 					<FlashList
 						data={courses}
-						keyExtractor={(item) => `${item.name}-${item.block}-${item.teacher}-${item.term}-${item.roomNumber}`}
-						
+						keyExtractor={(item, index) => index.toString()}
 						renderItem={({ item }) => (
 							<CourseInfoCard
 								name={item.name}
@@ -190,9 +169,7 @@ const AddCourseScreen = () => {
 								block={item.block}
 								lunch={item.lunch}
 								term={item.term}
-								roomNumber={item.roomNumber}>
-								<FAB style={{backgroundColor: 'red', aspectRatio: 1, alignSelf: 'flex-end', position: 'absolute', alignItems: 'center', justifyContent: 'center', zIndex: 5}} icon='alpha-x' size='medium' onPress={() => deleteCourse({"block": item.block, "lunch": item.lunch, "name": item.name, "roomNumber": item.roomNumber, "teacher": item.teacher, "term": item.term})}></FAB>
-							</CourseInfoCard>
+								roomNumber={item.roomNumber} />
 						)}
 						estimatedItemSize={100}
 					/>

@@ -231,7 +231,7 @@ export default function HomeScreen() {
 			{/* Course List */}
 			<FlashList
 				data={courses}
-				keyExtractor={(item) => `${item.name}-${item.block}-${item.teacher}-${item.term}-${item.roomNumber}`}
+				keyExtractor={(item, index) => `${item.name}-${index}`}//formerly for item.block but item.block is not unique
 				estimatedItemSize={100}
 				renderItem={({ item }) => {
 					const times = schedule.find((s) => s.block === item.block);

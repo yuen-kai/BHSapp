@@ -24,13 +24,6 @@ interface Store {
     setCourses: (courses: Course[]) => void;
 }
 
-const initializeStore = async (set: any) => {
-    const savedCourses = await getCourses();
-    const sortedCourses = sortCoursesFunction(savedCourses);
-    set({ courses: sortedCourses });
-    storeCourses(sortedCourses); // Save sorted courses back to AsyncStorage
-};
-
 export const sortCoursesFunction = (newCourses: Course[]): Course[] => {//also must update courses
     let newCourseList = [];
     let blockList = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
@@ -53,6 +46,23 @@ const useStore = create<Store>((set) => ({
     },
 }));
 
-initializeStore(useStore.setState);
+export const useLoadCourses = () => {
+    const { setCourses } = useStore();
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const loadCourses = async () => {
+            const savedCourses = await getCourses();
+            const sortedCourses = sortCoursesFunction(savedCourses);
+            console.log(sortedCourses)
+            setCourses(sortedCourses);
+            setLoading(false);
+        };
+
+        loadCourses();
+    }, [setCourses]);
+
+    return loading;
+};
 
 export default useStore;
