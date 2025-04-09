@@ -8,6 +8,7 @@ const storeCourses = async (value: Course[]) => {
         await AsyncStorage.setItem('courses', JSON.stringify(value));
     } catch (e) {
         // saving error
+        console.error("Error storing courses: ", e);
     }
 };
 const getCourses = async (): Promise<Course[]> => {
