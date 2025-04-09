@@ -22,6 +22,7 @@ const AddCourseScreen = () => {
   const [courseLunch, setLunch] = useState(NaN);
   const [term, setTerm] = useState(NaN);
   const [roomNumber, setRoomNumber] = useState("");
+  const [addedCourses, setAddedCourses] = useState<Course[]>([]);
   const { courses, setCourses } = useStore();
 
   const blockOptions = [
@@ -61,7 +62,10 @@ const AddCourseScreen = () => {
       term: term,
       roomNumber: roomNumber,
     };
-    setCourses(sortCoursesFunction([...courses, newCourse]));
+
+    setAddedCourses([...addedCourses, newCourse]);
+    setCourses(sortCoursesFunction([...addedCourses, newCourse]));
+    console.log(courses);
     // Clear inputs
     setCourseName("");
     setCourseTeacher("");
@@ -86,6 +90,7 @@ const AddCourseScreen = () => {
     if (indexToRemove !== -1) {
       newCourses.splice(indexToRemove, 1); // Remove the item if found
     }
+    setAddedCourses(sortCoursesFunction(newCourses));
     setCourses(sortCoursesFunction(newCourses));
   };
 

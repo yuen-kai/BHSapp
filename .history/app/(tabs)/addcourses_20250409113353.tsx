@@ -62,6 +62,7 @@ const AddCourseScreen = () => {
       roomNumber: roomNumber,
     };
     setCourses(sortCoursesFunction([...courses, newCourse]));
+    console.log(courses);
     // Clear inputs
     setCourseName("");
     setCourseTeacher("");
