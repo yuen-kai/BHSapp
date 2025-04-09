@@ -4,11 +4,10 @@ import {
   StyleSheet,
   Keyboard,
   TouchableWithoutFeedback,
-  FlatList,
 } from "react-native";
 
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
-import { useTheme, Text, TextInput, Button, FAB, IconButton } from "react-native-paper";
+import { useTheme, Text, TextInput, Button, FAB } from "react-native-paper";
 import { Dropdown } from "react-native-paper-dropdown";
 import { FlashList } from "@shopify/flash-list";
 import { Course } from "@/types/coursesConfig";
@@ -177,47 +176,44 @@ const AddCourseScreen = () => {
         </Button>
         <View style={styles.courseList}>
           <Text style={styles.subTitle}>Added Courses</Text>
-          <FlatList
+          <FlashList
             data={courses}
             keyExtractor={(item) =>
               `${item.name}-${item.block}-${item.teacher}-${item.term}-${item.roomNumber}`
             }
             renderItem={({ item }) => (
-			  <CourseInfoCard
-				name={item.name}
-				teacher={item.teacher}
-				block={item.block}
-				lunch={item.lunch}
-				term={item.term}
-				roomNumber={item.roomNumber}
-			  >
-				<IconButton
-				  icon="close"
-				  style={{
-					position: 'absolute',
-					right: 8,
-					top: 8,
-					// backgroundColor: 'rgba(255, 59, 48, 0.9)',
-					borderRadius: 16,
-					height: 32,
-					width: 32,
-					elevation: 2,
-				  }}
-				  mode="contained"
-				//   size="small"
-				//   color="#fff"
-				  onPress={() =>
-					deleteCourse({
-					  block: item.block,
-					  lunch: item.lunch,
-					  name: item.name,
-					  roomNumber: item.roomNumber,
-					  teacher: item.teacher,
-					  term: item.term,
-					})
-				  }
-				/>
-			  </CourseInfoCard>
+              <CourseInfoCard
+                name={item.name}
+                teacher={item.teacher}
+                block={item.block}
+                lunch={item.lunch}
+                term={item.term}
+                roomNumber={item.roomNumber}
+              >
+                <FAB
+                  style={{
+                    backgroundColor: "red",
+                    aspectRatio: 1,
+                    alignSelf: "flex-end",
+                    position: "absolute",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    zIndex: 5,
+                  }}
+                  icon="alpha-x"
+                  size="medium"
+                  onPress={() =>
+                    deleteCourse({
+                      block: item.block,
+                      lunch: item.lunch,
+                      name: item.name,
+                      roomNumber: item.roomNumber,
+                      teacher: item.teacher,
+                      term: item.term,
+                    })
+                  }
+                ></FAB>
+              </CourseInfoCard>
             )}
             estimatedItemSize={100}
           />
