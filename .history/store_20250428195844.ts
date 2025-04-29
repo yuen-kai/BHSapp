@@ -33,8 +33,19 @@ const initializeStore = async (set: any) => {
 };
 
 export const sortCoursesFunction = (newCourses: Course[]): Course[] => {//also must update courses
+    let newCourseList = [];
     let blockList = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-    return newCourses.sort(function(a, b){return blockList.indexOf(a.block) - blockList.indexOf(b.block)});
+    let blockIndex = 0;
+    console.log(newCourses.sort(function(a, b){return blockList.indexOf(a.block) - blockList.indexOf(b.block)}))
+    for (let i = 0; i < blockList.length; i++) {
+        for (const course of newCourses) {
+            if (course.block == blockList[blockIndex]) {
+                newCourseList.push(course);
+            }
+        }
+        blockIndex++;
+    }
+    return newCourseList;
 };
 const useStore = create<Store>((set) => ({
     courses: [],

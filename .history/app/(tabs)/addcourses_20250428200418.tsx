@@ -197,7 +197,7 @@ const AddCourseScreen = () => {
 					position: 'absolute',
 					right: 8,
 					top: 8,
-					//backgroundColor: 'rgba(255, 59, 48, 0.9)',
+					backgroundColor: 'rgba(255, 59, 48, 0.9)',
 					borderRadius: 16,
 					height: 32,
 					width: 32,
