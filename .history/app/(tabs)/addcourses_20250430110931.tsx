@@ -207,7 +207,7 @@ const AddCourseScreen = () => {
 				//   size="small"
 				//   color="#fff"
 				  onPress={() =>
-            console.log('pressed')
+            console.log('pressed');
 					// deleteCourse({
 					//   block: item.block,
 					//   lunch: item.lunch,

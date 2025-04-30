@@ -251,7 +251,6 @@ export default function Announcements() {
         />
         <Portal>
           <Dialog visible={addAnnouncementVisible} style={{position: 'fixed'}} onDismiss={()=>setAddAnnouncementVisible(false)}>
-            <Dialog.Title>New Announcement</Dialog.Title>
             <Dialog.Content>
               <TextInput
                 label="Title"
@@ -263,7 +262,7 @@ export default function Announcements() {
                 label="Body"
                 value={newContent}
                 onChangeText={setNewContent}
-                style={[styles.input, { height: 100}]}
+                style={styles.input}
                 multiline={true}
               />
             </Dialog.Content>

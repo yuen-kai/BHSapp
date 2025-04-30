@@ -251,24 +251,8 @@ export default function Announcements() {
         />
         <Portal>
           <Dialog visible={addAnnouncementVisible} style={{position: 'fixed'}} onDismiss={()=>setAddAnnouncementVisible(false)}>
-            <Dialog.Title>New Announcement</Dialog.Title>
-            <Dialog.Content>
-              <TextInput
-                label="Title"
-                value={newTitle}
-                onChangeText={setNewTitle}
-                style={styles.input}
-              />
-              <TextInput
-                label="Body"
-                value={newContent}
-                onChangeText={setNewContent}
-                style={[styles.input, { height: 100}]}
-                multiline={true}
-              />
-            </Dialog.Content>
             <Dialog.Actions>
-              <Button mode="contained" onPress={addAnnouncement} style={{width: '100%'}}>
+              <Button mode="contained" onPress={addAnnouncement}>
                 Add
               </Button>
             </Dialog.Actions>
