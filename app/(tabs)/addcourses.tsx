@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Keyboard,
-  TouchableWithoutFeedback,
-  FlatList,
-} from "react-native";
+import { View, StyleSheet, Keyboard, TouchableWithoutFeedback, FlatList } from "react-native";
 
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { useTheme, Text, TextInput, Button, FAB, IconButton } from "react-native-paper";
@@ -48,9 +42,7 @@ const AddCourseScreen = () => {
 
   const handleAddCourse = () => {
     if (!courseName || !courseTeacher || !courseBlock || !roomNumber) {
-      alert(
-        "Please fill in the course name, teacher, main block, and room number."
-      );
+      alert("Please fill in the course name, teacher, main block, and room number.");
       return;
     }
 
@@ -72,16 +64,15 @@ const AddCourseScreen = () => {
     setRoomNumber("");
   };
   const deleteCourse = (c: Course) => {
-    console.log(c, courses);
-	const newCourses = [...courses];
+    const newCourses = [...courses];
     const indexToRemove = newCourses.findIndex(
       (course) =>
         course.name === c.name &&
         course.block === c.block &&
-        course.lunch === c.lunch &&
+        (isNaN(course.lunch) || isNaN(c.lunch) || course.lunch === c.lunch) &&
         course.roomNumber === c.roomNumber &&
         course.teacher === c.teacher &&
-        course.term === c.term
+        (isNaN(course.term) || isNaN(c.term) || course.term === c.term)
     );
 
     if (indexToRemove !== -1) {
@@ -93,9 +84,7 @@ const AddCourseScreen = () => {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        <Text style={[styles.title, { color: colors.primary }]}>
-          Add a Course
-        </Text>
+        <Text style={[styles.title, { color: colors.primary }]}>Add a Course</Text>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <>
             <TextInput
@@ -168,11 +157,7 @@ const AddCourseScreen = () => {
           onSubmitEditing={Keyboard.dismiss}
         />
 
-        <Button
-          mode="contained"
-          onPress={handleAddCourse}
-          style={styles.button}
-        >
+        <Button mode="contained" onPress={handleAddCourse} style={styles.button}>
           Add Course
         </Button>
         <View style={styles.courseList}>
@@ -183,43 +168,43 @@ const AddCourseScreen = () => {
               `${item.name}-${item.block}-${item.teacher}-${item.term}-${item.roomNumber}`
             }
             renderItem={({ item }) => (
-			  <CourseInfoCard
-				name={item.name}
-				teacher={item.teacher}
-				block={item.block}
-				lunch={item.lunch}
-				term={item.term}
-				roomNumber={item.roomNumber}
-			  >
-				<IconButton
-				  icon="close"
-				  style={{
-					position: 'absolute',
-					right: 8,
-					top: 8,
-					//backgroundColor: 'rgba(255, 59, 48, 0.9)',
-					borderRadius: 16,
-					height: 32,
-					width: 32,
-					elevation: 2,
-				  }}
-				  mode="contained"
-				//   size="small"
-				//   color="#fff"
-				  onPress={() =>
-					deleteCourse({
-					  block: item.block,
-					  lunch: item.lunch,
-					  name: item.name,
-					  roomNumber: item.roomNumber,
-					  teacher: item.teacher,
-					  term: item.term,
-					})
-				  }
-				/>
-			  </CourseInfoCard>
+              <CourseInfoCard
+                name={item.name}
+                teacher={item.teacher}
+                block={item.block}
+                lunch={item.lunch}
+                term={item.term}
+                roomNumber={item.roomNumber}
+              >
+                <IconButton
+                  icon="close"
+                  style={{
+                    position: "absolute",
+                    right: 8,
+                    top: 8,
+                    zIndex: 1,
+                    //backgroundColor: 'rgba(255, 59, 48, 0.9)',
+                    borderRadius: 16,
+                    height: 32,
+                    width: 32,
+                    elevation: 2,
+                  }}
+                  mode="contained"
+                  //   size="small"
+                  //   color="#fff"
+                  onPress={() => {
+                    deleteCourse({
+                      block: item.block,
+                      lunch: item.lunch,
+                      name: item.name,
+                      roomNumber: item.roomNumber,
+                      teacher: item.teacher,
+                      term: item.term,
+                    });
+                  }}
+                />
+              </CourseInfoCard>
             )}
-            estimatedItemSize={100}
           />
         </View>
       </SafeAreaView>
