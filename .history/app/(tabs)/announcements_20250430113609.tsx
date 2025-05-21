@@ -263,7 +263,7 @@ export default function Announcements() {
                 label="Body"
                 value={newContent}
                 onChangeText={setNewContent}
-                style={[styles.input, { height: 100}]}
+                style={styles.input}
                 multiline={true}
               />
             </Dialog.Content>

@@ -14,8 +14,7 @@ import {
   useTheme,
   Card,
   FAB,
-  Dialog,
-  Portal,
+  Modal,
 } from "react-native-paper";
 import { supabase } from "../../lib/supabase";
 import { Session } from "@supabase/supabase-js";
@@ -37,7 +36,7 @@ export default function Announcements() {
   const [newContent, setNewContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [profiles, setProfiles] = useState<Record<string, Profile>>({});
-  const [addAnnouncementVisible, setAddAnnouncementVisible] = useState(false);
+  const [addAnnouncementVisible, setAddAnnouncementVisible] = useState(true);
 
   /*type profile = {
         id: string,
@@ -246,35 +245,11 @@ export default function Announcements() {
       >
         <FAB
           icon="plus"
-          onPress={() => setAddAnnouncementVisible(true)}
+          onPress={() => setAddAnnouncementVisible(!addAnnouncementVisible)}
           style={{ alignSelf: "flex-end", position: "fixed", bottom: 20 }}
         />
-        <Portal>
-          <Dialog visible={addAnnouncementVisible} style={{position: 'fixed'}} onDismiss={()=>setAddAnnouncementVisible(false)}>
-            <Dialog.Title>New Announcement</Dialog.Title>
-            <Dialog.Content>
-              <TextInput
-                label="Title"
-                value={newTitle}
-                onChangeText={setNewTitle}
-                style={styles.input}
-              />
-              <TextInput
-                label="Body"
-                value={newContent}
-                onChangeText={setNewContent}
-                style={[styles.input, { height: 100}]}
-                multiline={true}
-              />
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button mode="contained" onPress={addAnnouncement} style={{width: '100%'}}>
-                Add
-              </Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
-          {/* <Card
+        {addAnnouncementVisible && (
+          <Card
             style={{
               padding: 7,
               marginTop: 5,
@@ -298,7 +273,8 @@ export default function Announcements() {
             <Button mode="contained" onPress={addAnnouncement}>
               Add
             </Button>
-          </Card> */}
+          </Card>
+        )}
       </View>
     </SafeAreaView>
   );
